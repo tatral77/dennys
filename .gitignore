@@ -1,0 +1,6 @@
+.vs
+LMS/bin/
+LMS/obj/
+Entities/bin/
+Entities/obj/
+packages/

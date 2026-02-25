@@ -1,0 +1,31 @@
+Employee can come at 22:00 and goes at 6:00
+
+Week starts from Thursday 7 AM to Next Thursday 6:59 AM 
+Day starts from 7 AM to Next 6:59 AM
+ if a person comes at 22:00 and leaves at 09:00. 2 hours will go to next day
+Week can start from previous year and can go into next year
+
+if cook works for 38 hours and next he gets manager job for 8 hours. 2 hours will be treated as normal rate as manager and 6 hours will go as overtime as manager.
+
+overtime can only be calculated in same week
+
+40 hours in week normal rate + will be overtime.
+
+
+25 + 45 
+
+There are some employees on fixed salary per week.
+hourly budget should not exceed 18 percent
+
+		hourly budget=budget-salary amount 
+
+employee can request off and will not be available to schedule his job at that time if off accepted.
+
+
+
+
+
+
+ 
+
+

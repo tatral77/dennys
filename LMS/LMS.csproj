@@ -453,29 +453,13 @@
     <Compile Include="Helper\SalaryCaculationHelper.cs" />
     <Compile Include="Helper\WeeklyPaymentByJob.cs" />
     <Compile Include="Helper\WeeklyPaymentResult.cs" />
-    <Compile Include="Migrations\202602120857527_12022026.cs" />
-    <Compile Include="Migrations\202602120857527_12022026.Designer.cs">
-      <DependentUpon>202602120857527_12022026.cs</DependentUpon>
+    <Compile Include="Migrations\202602250841360_shahzad.cs" />
+    <Compile Include="Migrations\202602250841360_shahzad.Designer.cs">
+      <DependentUpon>202602250841360_shahzad.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202602121037228_Time changed.cs" />
-    <Compile Include="Migrations\202602121037228_Time changed.Designer.cs">
-      <DependentUpon>202602121037228_Time changed.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202602121115349_Time changed2.cs" />
-    <Compile Include="Migrations\202602121115349_Time changed2.Designer.cs">
-      <DependentUpon>202602121115349_Time changed2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202602131819573_13022026.cs" />
-    <Compile Include="Migrations\202602131819573_13022026.Designer.cs">
-      <DependentUpon>202602131819573_13022026.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202602131832236_130220262.cs" />
-    <Compile Include="Migrations\202602131832236_130220262.Designer.cs">
-      <DependentUpon>202602131832236_130220262.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202602160709510_init2.cs" />
-    <Compile Include="Migrations\202602160709510_init2.Designer.cs">
-      <DependentUpon>202602160709510_init2.cs</DependentUpon>
+    <Compile Include="Migrations\202602250848525_shahzad2.cs" />
+    <Compile Include="Migrations\202602250848525_shahzad2.Designer.cs">
+      <DependentUpon>202602250848525_shahzad2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Employee.cs" />
@@ -529,23 +513,11 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202602120857527_12022026.resx">
-      <DependentUpon>202602120857527_12022026.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202602250841360_shahzad.resx">
+      <DependentUpon>202602250841360_shahzad.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202602121037228_Time changed.resx">
-      <DependentUpon>202602121037228_Time changed.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202602121115349_Time changed2.resx">
-      <DependentUpon>202602121115349_Time changed2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202602131819573_13022026.resx">
-      <DependentUpon>202602131819573_13022026.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202602131832236_130220262.resx">
-      <DependentUpon>202602131832236_130220262.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202602160709510_init2.resx">
-      <DependentUpon>202602160709510_init2.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202602250848525_shahzad2.resx">
+      <DependentUpon>202602250848525_shahzad2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

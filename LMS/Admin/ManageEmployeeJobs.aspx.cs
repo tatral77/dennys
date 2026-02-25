@@ -254,7 +254,7 @@ namespace LMS.Admin
         {
             int EmployeeId = Convert.ToInt32(Request.QueryString["Id"]);
             List<EmployeeWeeklyJob> employeeWeeklyJobs = employeeWeeklyJobRepo.GetEmployeeWeeklyJobs(EmployeeId);
-            if (employeeWeeklyJobs != null)
+            if (employeeWeeklyJobs != null && employeeWeeklyJobs.Count>0)
                 // Employee emp = emprepo.GetEmployee(EmployeeId);
                 EmployeeDetail.InnerText = employeeWeeklyJobs[0].Employee.Name;
             List<EmployeeWeeklyJob> employee = employeeWeeklyJobRepo.GetEmployeeWeeklyJobs(EmployeeId);

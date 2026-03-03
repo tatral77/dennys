@@ -38,6 +38,7 @@ namespace LMS.Models
         public virtual DbSet<JobTitle> JobTitles { get; set; }
         public virtual DbSet<JobSchedule> JobSchedules { get; set; }
         public virtual DbSet<EmployeeWeeklyJob> EmployeeWeeklyJobs { get; set; }
+        public virtual DbSet<RestaurantWeek> RestaurantWeeks { get; set; }
 
 
         //protected override void OnModelCreating(DbModelBuilder modelBuilder)

@@ -1,4 +1,5 @@
-﻿using LMS.Models;
+﻿using LMS.Helper;
+using LMS.Models;
 using LMS.Repos;
 using System;
 using System.Collections.Generic;
@@ -17,8 +18,10 @@ namespace LMS.Admin
         {
             if (!IsPostBack)
             {
+              
                 bindLV();
             }
+               
         }
         protected void bindLV()
         {

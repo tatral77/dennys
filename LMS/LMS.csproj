@@ -470,6 +470,10 @@
     <Compile Include="Migrations\202603020953293_Weeks Added.Designer.cs">
       <DependentUpon>202603020953293_Weeks Added.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202603120552594_init.cs" />
+    <Compile Include="Migrations\202603120552594_init.Designer.cs">
+      <DependentUpon>202603120552594_init.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\EmployeeJob.cs" />
@@ -521,6 +525,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202603020953293_Weeks Added.resx">
       <DependentUpon>202603020953293_Weeks Added.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202603120552594_init.resx">
+      <DependentUpon>202603120552594_init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

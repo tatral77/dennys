@@ -13,11 +13,11 @@ namespace LMS.Repos
         {
             mSContext = new ApplicationDbContext();
         }
-        public List<JobSchedule> GetAll()
+        public List<JobSchedule> GetAll(int LocationId)
         {
             try
             {
-                return mSContext.JobSchedules.ToList();
+                return mSContext.JobSchedules.Where(e => e.LocationId == LocationId).ToList();
             }
             catch
             {
@@ -25,11 +25,11 @@ namespace LMS.Repos
             }
 
         }
-        public List<JobSchedule> GetActive()
+        public List<JobSchedule> GetActive(int LocationId)
         {
             try
             {
-                return mSContext.JobSchedules.Where(e => e.IsActive == true).ToList();
+                return mSContext.JobSchedules.Where(e => e.IsActive == true && e.LocationId == LocationId).ToList();
             }
             catch
             {
@@ -75,6 +75,7 @@ namespace LMS.Repos
                     return false;
                 }
                 //result.CreatedOn = entity.CreatedOn;
+                result.LocationId = entity.LocationId;
                 result.Description = entity.Description;
                 result.ForcastedSale = entity.ForcastedSale;
                 result.Percentage = entity.Percentage;
@@ -82,7 +83,7 @@ namespace LMS.Repos
                 mSContext.SaveChanges();
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
                 return false;

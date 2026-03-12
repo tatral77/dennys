@@ -3,7 +3,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
      <div class="row" style="padding-bottom: 5px">
-        <div class="col-md-6"><span style="font-size: 18pt">Locations</span></div>
+        <div class="col-md-6"><span style="font-size: 18pt">Job Schedules</span></div>
         <div class="col-md-6" style="text-align: right">
             <asp:Button ID="Button1" runat="server" CssClass="btn btn-success" Text="+" OnClick="AddButton_Click" /></div>
     </div>
@@ -90,22 +90,18 @@
                 </td>
 
                 <td>
-                    <a href="ManageEmployeeJobSchedule.aspx?Id=<%#Eval("Id")%>"><%#Eval("Description")%></a>
-                    <%--<asp:Label ID="Name" runat="server" Text='<%#Eval("Name")%>'></asp:Label>--%>
+                   
+                   <asp:Label ID="Name" runat="server" Text='<%#Eval("Description")%>'></asp:Label>
                 </td>
+                 
                  <td>
-                    <a href="WeeklyScheduleCalendar.aspx?Id=<%#Eval("Id")%>"><%#Eval("Description")%></a>
-                    <%--<asp:Label ID="Name" runat="server" Text='<%#Eval("Name")%>'></asp:Label>--%>
-                </td>
-                 <td>
-                    <asp:Label ID="Name" runat="server" Text='<%#Eval("ForcastedSale")%>'></asp:Label>
+                    <asp:Label ID="sale" runat="server" Text='<%#Eval("ForcastedSale")%>'></asp:Label>
                 </td>
                  <td>
                     <asp:Label ID="ghgh" runat="server" Text='<%#Eval("Percentage")%>'></asp:Label>
                 </td>
                    <td>
-                    <a href="ManageEmployeeJobSchedule.aspx?Id=<%#Eval("Id")%>"><%#Eval("CreatedOn")%></a>
-                    <%--<asp:Label ID="Name" runat="server" Text='<%#Eval("Name")%>'></asp:Label>--%>
+                    <asp:Label ID="createdon" runat="server" Text='<%#Eval("CreatedOn")%>'></asp:Label>
                 </td>
 
                <td>
@@ -115,6 +111,8 @@
                 <td>
                      <asp:LinkButton ID="editImageButton" class="btn btn-warning" runat="server" CommandName="edit"
                         ToolTip="Edit"><span class="glyphicon glyphicon-pencil"></span></asp:LinkButton>
+                     <a href="ManageEmployeeJobSchedule.aspx?Id=<%#Eval("Id")%>" class="btn btn-success">Employees Schedule </a>
+                     <a href="WeeklyScheduleCalendar.aspx?Id=<%#Eval("Id")%>" class="btn btn-success">View Schedule</a>
                        <%--  <asp:LinkButton ID="deleteImageButton" class="btn btn-danger" runat="server" CommandName="delete"
                         ToolTip="Delete" OnClientClick="return confirm('Are you sure you want to delete record ?');"><span class="glyphicon glyphicon-erase"></span></asp:LinkButton>--%>
                 </td>

@@ -20,5 +20,6 @@ namespace LMS.Models
 
         public DateTime? ArchivedAt { get; set; } // Nullable timestamp for when the designation was archived
         public  List<Employee> Employees { get; set; }
+        public List<JobSchedule> JobSchedules { get; set; }
     }
 }

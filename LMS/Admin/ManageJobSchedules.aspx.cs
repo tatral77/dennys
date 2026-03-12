@@ -23,7 +23,8 @@ namespace LMS.Admin
         }
         protected void bindLV()
         {
-            List<JobSchedule> locations = repo.GetAll();
+            int locationId = Convert.ToInt32(Request.QueryString["Id"]);
+            List<JobSchedule> locations = repo.GetAll(locationId);
             LV.DataSource = locations;
             LV.DataBind();
 
@@ -39,21 +40,23 @@ namespace LMS.Admin
 
         protected void LV_ItemInserting(object sender, ListViewInsertEventArgs e)
         {
+            int locationId = Convert.ToInt32(Request.QueryString["Id"]);
             TextBox DescriptionTxt = (TextBox)LV.InsertItem.FindControl("DescriptionTxt");
             TextBox ForecastSaleTxt = (TextBox)LV.InsertItem.FindControl("ForecastSaleTxt");
             TextBox PercentageTxt = (TextBox)LV.InsertItem.FindControl("PercentageTxt");
-            JobSchedule location = new JobSchedule();
-            location.Description = Convert.ToString(DescriptionTxt.Text);
-            location.ForcastedSale= Convert.ToDouble(ForecastSaleTxt.Text);
-            location.Percentage = Convert.ToDouble(PercentageTxt.Text);
-            location.IsActive = true;
-            location.CreatedOn = DateTime.Now;
-            repo.Add(location);
+            JobSchedule jobSchedule = new JobSchedule();
+            jobSchedule.LocationId = locationId;
+            jobSchedule.Description = Convert.ToString(DescriptionTxt.Text);
+            jobSchedule.ForcastedSale = Convert.ToDouble(ForecastSaleTxt.Text);
+            jobSchedule.Percentage = Convert.ToDouble(PercentageTxt.Text);
+            jobSchedule.IsActive = true;
+            jobSchedule.CreatedOn = DateTime.Now;
+            repo.Add(jobSchedule);
             LV.EditIndex = -1;
             LV.InsertItemPosition = InsertItemPosition.None;
             bindLV();
             e.Cancel = true;
-            Response.Redirect("ManageJobSchedules.aspx");
+            Response.Redirect("ManageJobSchedules.aspx?id=" + locationId);
         }
 
         protected void LV_ItemCreated(object sender, ListViewItemEventArgs e)
@@ -83,24 +86,25 @@ namespace LMS.Admin
 
         protected void LV_ItemUpdating(object sender, ListViewUpdateEventArgs e)
         {
+            int locationId = Convert.ToInt32(Request.QueryString["Id"]);
             //DepartmentRepo dr = new DepartmentRepo(); 
             HiddenField Id = LV.EditItem.FindControl("HidId") as HiddenField;
             TextBox DescriptionTxt = (TextBox)LV.EditItem.FindControl("DescriptionTxt");
             TextBox ForecastSaleTxt = (TextBox)LV.EditItem.FindControl("ForecastSaleTxt");
             TextBox PercentageTxt = (TextBox)LV.EditItem.FindControl("PercentageTxt");
             DropDownList IsActiveDDL = (DropDownList)LV.EditItem.FindControl("IsActiveDDL");
-            JobSchedule locationDTO = new JobSchedule();
-            locationDTO.Id = Convert.ToInt32(Id.Value);
-            locationDTO.Description = Convert.ToString(DescriptionTxt.Text);
-            locationDTO.ForcastedSale = Convert.ToDouble(ForecastSaleTxt.Text);
-            locationDTO.Percentage = Convert.ToDouble(PercentageTxt.Text);
-            locationDTO.IsActive = Convert.ToBoolean(IsActiveDDL.SelectedValue);
-            repo.Update(locationDTO);
+            JobSchedule jobScheduleDTO = new JobSchedule();
+            jobScheduleDTO.Id = Convert.ToInt32(Id.Value);
+            jobScheduleDTO.Description = Convert.ToString(DescriptionTxt.Text);
+            jobScheduleDTO.ForcastedSale = Convert.ToDouble(ForecastSaleTxt.Text);
+            jobScheduleDTO.Percentage = Convert.ToDouble(PercentageTxt.Text);
+            jobScheduleDTO.IsActive = Convert.ToBoolean(IsActiveDDL.SelectedValue);
+            repo.Update(jobScheduleDTO);
             LV.EditIndex = -1;
             LV.InsertItemPosition = InsertItemPosition.None;
             bindLV();
             e.Cancel = true;
-            Response.Redirect("ManageJobSchedules.aspx");
+            Response.Redirect("ManageJobSchedules.aspx?id=" + locationId);
 
         }
 
@@ -129,6 +133,7 @@ namespace LMS.Admin
 
         protected void LV_ItemDeleting(object sender, ListViewDeleteEventArgs e)
         {
+            int locationId = Convert.ToInt32(Request.QueryString["Id"]);
             HiddenField Id = (HiddenField)LV.Items[e.ItemIndex].FindControl("HidId");
             if (!string.IsNullOrEmpty(Id.Value))
             {
@@ -140,7 +145,7 @@ namespace LMS.Admin
                 LV.InsertItemPosition = InsertItemPosition.None;
                 bindLV();
                 e.Cancel = true;
-                Response.Redirect("ManageJobSchedules.aspx");
+                Response.Redirect("ManageJobSchedules.aspx?id=" + locationId);
             }
         }
 

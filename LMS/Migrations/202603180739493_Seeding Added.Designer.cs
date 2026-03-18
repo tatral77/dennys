@@ -7,13 +7,13 @@ namespace LMS.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class init : IMigrationMetadata
+    public sealed partial class SeedingAdded : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(init));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(SeedingAdded));
         
         string IMigrationMetadata.Id
         {
-            get { return "202603120552594_init"; }
+            get { return "202603180739493_Seeding Added"; }
         }
         
         string IMigrationMetadata.Source

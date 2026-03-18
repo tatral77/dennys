@@ -13,7 +13,7 @@ namespace LMS.Repos
         {
             mSContext = new ApplicationDbContext();
         }
-        public List<RestaurantWeek> GetAll(int Year)
+        public List<ScheduleWeek> GetAll(int Year)
         {
             try
             {
@@ -26,7 +26,7 @@ namespace LMS.Repos
 
         }
       
-        public RestaurantWeek GetRestaurantWeek(int Id)
+        public ScheduleWeek GetRestaurantWeek(int Id)
         {
             try
             {
@@ -39,7 +39,7 @@ namespace LMS.Repos
 
         }
 
-        public bool Add(RestaurantWeek entity)
+        public bool Add(ScheduleWeek entity)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace LMS.Repos
             }
 
         }
-        public bool Add(List<RestaurantWeek> entities)
+        public bool Add(List<ScheduleWeek> entities)
         {
             try
             {
@@ -70,11 +70,11 @@ namespace LMS.Repos
             }
 
         }
-        public bool Update(RestaurantWeek entity)
+        public bool Update(ScheduleWeek entity)
         {
             try
             {
-                RestaurantWeek result = mSContext.RestaurantWeeks.FirstOrDefault(e => e.Id == entity.Id);
+                ScheduleWeek result = mSContext.RestaurantWeeks.FirstOrDefault(e => e.Id == entity.Id);
                 if (result == null)
                 {
                     return false;
@@ -97,7 +97,7 @@ namespace LMS.Repos
             try
             {
 
-                RestaurantWeek result = mSContext.RestaurantWeeks.FirstOrDefault(e => e.Id == id);
+                ScheduleWeek result = mSContext.RestaurantWeeks.FirstOrDefault(e => e.Id == id);
                 if (result == null)
                 {
                     return false;
@@ -118,9 +118,9 @@ namespace LMS.Repos
             public int IsActive { get; set; }
 
         }
-        public IQueryable<RestaurantWeek> SearchRestaurantWeek(FilterRestaurantWeek filter)
+        public IQueryable<ScheduleWeek> SearchRestaurantWeek(FilterRestaurantWeek filter)
         {
-            IQueryable<RestaurantWeek> query = mSContext.Set<RestaurantWeek>();
+            IQueryable<ScheduleWeek> query = mSContext.Set<ScheduleWeek>();
             // assuming that you return all records when nothing is specified in the filter
 
             //if (!string.IsNullOrEmpty(filter.Description))

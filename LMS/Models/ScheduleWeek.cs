@@ -5,7 +5,7 @@ using System.Web;
 
 namespace LMS.Models
 {
-    public class RestaurantWeek
+    public class ScheduleWeek
     {
         public int Id { get; set; }
         public int WeekNumber { get; set; }

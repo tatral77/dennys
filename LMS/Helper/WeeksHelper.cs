@@ -8,9 +8,9 @@ namespace LMS.Helper
 {
     public static class WeeksHelper
     {
-        public static List<RestaurantWeek> GenerateRestaurantWeeks(int year)
+        public static List<ScheduleWeek> GenerateRestaurantWeeks(int year)
         {
-            var weeks = new List<RestaurantWeek>();
+            var weeks = new List<ScheduleWeek>();
             int WeekNumber = 1;
 
             // Start checking from Dec 25 of previous year
@@ -37,7 +37,7 @@ namespace LMS.Helper
                 // Add only weeks that belong to requested year
                 if (currentStart.Year == year)
                 {
-                    weeks.Add(new RestaurantWeek
+                    weeks.Add(new ScheduleWeek
                     {
                         WeekDecription="Week " + WeekNumber,
                         WeekNumber = WeekNumber++,
@@ -53,7 +53,7 @@ namespace LMS.Helper
             return weeks;
         }
 
-        internal static List<RestaurantWeek> GetRestaurantWeeks(int v)
+        internal static List<ScheduleWeek> GetRestaurantWeeks(int v)
         {
             throw new NotImplementedException();
         }

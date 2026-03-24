@@ -41,7 +41,7 @@ namespace LMS.Account
                     case SignInStatus.Success:
                         string userId = signinManager.AuthenticationManager.AuthenticationResponseGrant.Identity.GetUserId();
                         IList<string> userRoles = UserManager.GetRoles(userId);
-                        if (userRoles.Contains("Admin"))
+                        if (userRoles.Contains("admin"))
                             Response.Redirect("~/Admin/AdminHome.aspx");
                         else
                             IdentityHelper.RedirectToReturnUrl(Request.QueryString["ReturnUrl"], Response);

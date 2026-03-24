@@ -13,7 +13,7 @@ namespace LMS.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "202603120552594_init"; }
+            get { return "202603151756320_init"; }
         }
         
         string IMigrationMetadata.Source

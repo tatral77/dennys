@@ -23,17 +23,17 @@ namespace LMS.Admin
         }
         protected void BindLV(int year)
         {
-            List<RestaurantWeek> result = restaurantWeekRepo.GetAll(year);
+            List<ScheduleWeek> result = restaurantWeekRepo.GetAll(year);
             LV.DataSource = result;
             LV.DataBind();
         }
         protected void GenerateWeeksBtn_Click(object sender, EventArgs e)
         {
             int year = Convert.ToInt32(YearTxt.Text);
-            List<RestaurantWeek> result = restaurantWeekRepo.GetAll(year);
+            List<ScheduleWeek> result = restaurantWeekRepo.GetAll(year);
             if (result.Count==0)
             {
-                List<RestaurantWeek> restaurantWeeks = WeeksHelper.GenerateRestaurantWeeks(year);
+                List<ScheduleWeek> restaurantWeeks = WeeksHelper.GenerateRestaurantWeeks(year);
                 restaurantWeekRepo.Add(restaurantWeeks);
             }
             BindLV(year);

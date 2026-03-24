@@ -466,9 +466,9 @@
     <Compile Include="Helper\WeeklyPaymentByJob.cs" />
     <Compile Include="Helper\WeeklyPaymentResult.cs" />
     <Compile Include="Helper\WeeksHelper.cs" />
-    <Compile Include="Migrations\202603151756320_init.cs" />
-    <Compile Include="Migrations\202603151756320_init.Designer.cs">
-      <DependentUpon>202603151756320_init.cs</DependentUpon>
+    <Compile Include="Migrations\202603180739493_Seeding Added.cs" />
+    <Compile Include="Migrations\202603180739493_Seeding Added.Designer.cs">
+      <DependentUpon>202603180739493_Seeding Added.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Employee.cs" />
@@ -479,7 +479,7 @@
     <Compile Include="Models\JobSchedule.cs" />
     <Compile Include="Models\JobTitle.cs" />
     <Compile Include="Models\Location.cs" />
-    <Compile Include="Models\RestaurantWeek.cs" />
+    <Compile Include="Models\ScheduleWeek.cs" />
     <Compile Include="Models\SalaryType.cs" />
     <Compile Include="Models\WeeklyPayroll.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -519,8 +519,8 @@
     <Folder Include="Users\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202603151756320_init.resx">
-      <DependentUpon>202603151756320_init.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202603180739493_Seeding Added.resx">
+      <DependentUpon>202603180739493_Seeding Added.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

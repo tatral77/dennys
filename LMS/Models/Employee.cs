@@ -23,7 +23,7 @@ namespace LMS.Models
         public string Phone { get; set; } // Phone (varchar(25), required, unique)
 
         public bool IsActive { get; set; } = true; // Active status (default true)
-
+        public Location Location { get; set; }
         public List<EmployeeJob> EmployeeJobs { get; set; }
 
         public DateTime CreatedAt { get; set; } // Created timestamp

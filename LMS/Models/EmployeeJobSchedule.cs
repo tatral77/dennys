@@ -6,13 +6,15 @@ namespace LMS.Models
     public class EmployeeJobSchedule
     {
         public int Id { get; set; }
-        public int JobScheduleId { get; set; }
+        public int ScheduleWeekId { get; set; }
         public int EmployeeJobId { get; set; }
         public int StartWeekDayId { get; set; }
+        public DateTime StartDate { get; set; }
         [NotMapped]
         public DayOfWeek StartWeekDay { get; set; }
         public TimeSpan StartTime { get; set; }
         public int EndWeekDayId { get; set; }
+        public DateTime EndDate { get; set; }
         [NotMapped]
         public DayOfWeek EndWeekDay { get; set; }
         public TimeSpan EndTime { get; set; }
@@ -34,6 +36,6 @@ namespace LMS.Models
         public double TotalOverTimeAmount { get; set; }
         public bool IsActive { get; set; }
         public  EmployeeJob EmployeeJob { get; set; }
-        public  JobSchedule JobSchedule { get; set; }
+        public  ScheduleWeek ScheduleWeek { get; set; }
     }
 }

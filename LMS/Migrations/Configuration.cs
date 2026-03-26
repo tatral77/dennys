@@ -23,11 +23,11 @@ namespace LMS.Migrations
                 .HasForeignKey(js => js.LocationId)
                 .WillCascadeOnDelete(false);     
 
-              modelBuilder.Entity<EmployeeJobSchedule>()
-                .HasRequired(js => js.JobSchedule)   // or HasOptional if nullable
-                .WithMany(l => l.)    // or .WithMany() if no navigation property
-                .HasForeignKey(js => js.LocationId)
-                .WillCascadeOnDelete(false);     
+              //modelBuilder.Entity<EmployeeJobSchedule>()
+              //  .HasRequired(js => js.JobSchedule)   // or HasOptional if nullable
+              //  .WithMany(l => l.)    // or .WithMany() if no navigation property
+              //  .HasForeignKey(js => js.LocationId)
+              //  .WillCascadeOnDelete(false);     
 
            // base.OnModelCreating(modelBuilder);
         }
@@ -83,7 +83,7 @@ namespace LMS.Migrations
                 {
                     context.Employees.AddOrUpdate(
                     d => d.Name,  // Unique constraint on the Name field to avoid duplicates
-                    new Employee { Id = Id, Name = employee, LocationId = 1, Email=employee + "@dennys.com",Phone="12345678",IsActive=true,CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now }
+                    new Employee { Id = Id, Name = employee, LocationId = 1, Email=employee + "@dennys.com",Phone="12345678" + Id,IsActive=true,CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now }
                 ) ;
                     Id++;
                 }

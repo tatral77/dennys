@@ -52,7 +52,7 @@ namespace LMS.Repos
         {
             try
             {
-                return mSContext.Employees.Where(e => e.LocationId == LocationId).ToList();
+                return mSContext.Employees.Where(e => e.LocationId == LocationId).OrderBy(e=>e.Name).ToList();
             }
             catch
             {

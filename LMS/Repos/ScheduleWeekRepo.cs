@@ -6,10 +6,10 @@ using System.Web;
 
 namespace LMS.Repos
 {
-    public class RestaurantWeekRepo
+    public class ScheduleWeekRepo
     {
         ApplicationDbContext mSContext;
-        public RestaurantWeekRepo()
+        public ScheduleWeekRepo()
         {
             mSContext = new ApplicationDbContext();
         }
@@ -17,7 +17,7 @@ namespace LMS.Repos
         {
             try
             {
-                return mSContext.RestaurantWeeks.Where(e => e.Year == Year).ToList();
+                return mSContext.ScheduleWeeks.Where(e => e.Year == Year).ToList();
             }
             catch
             {
@@ -25,12 +25,23 @@ namespace LMS.Repos
             }
 
         }
-      
-        public ScheduleWeek GetRestaurantWeek(int Id)
+        public List<ScheduleWeek> GetActive(int Year)
         {
             try
             {
-                return mSContext.RestaurantWeeks.Where(e => e.Id == Id).FirstOrDefault();
+                return mSContext.ScheduleWeeks.Where(e => e.Year == Year).ToList();
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
+        public ScheduleWeek GetScheduleWeek(int Id)
+        {
+            try
+            {
+                return mSContext.ScheduleWeeks.Where(e => e.Id == Id).FirstOrDefault();
             }
             catch
             {
@@ -43,7 +54,7 @@ namespace LMS.Repos
         {
             try
             {
-                mSContext.RestaurantWeeks.Add(entity);
+                mSContext.ScheduleWeeks.Add(entity);
                 mSContext.SaveChanges();
                 return true;
             }
@@ -59,7 +70,7 @@ namespace LMS.Repos
             {
                 using (mSContext)
                 {
-                    mSContext.RestaurantWeeks.AddRange(entities);
+                    mSContext.ScheduleWeeks.AddRange(entities);
                     mSContext.SaveChanges(); // Inserts all tracked entities into the database
                     return true;
                 }
@@ -74,20 +85,23 @@ namespace LMS.Repos
         {
             try
             {
-                ScheduleWeek result = mSContext.RestaurantWeeks.FirstOrDefault(e => e.Id == entity.Id);
+                ScheduleWeek result = mSContext.ScheduleWeeks.FirstOrDefault(e => e.Id == entity.Id);
                 if (result == null)
                 {
                     return false;
                 }
                 //result.CreatedOn = entity.CreatedOn;
-                result.WeekStartDate = entity.WeekStartDate;
-                result.WeekEndDate = entity.WeekEndDate;
+                result.Year = entity.Year;
+                result.WeekDecription = entity.WeekDecription;
+                result.ForcastedSale = entity.ForcastedSale;
+                result.Percentage = entity.Percentage;
                 mSContext.SaveChanges();
                 return true;
             }
             catch (Exception ex)
             {
                 throw ex;
+                return false;
             }
 
         }
@@ -97,7 +111,7 @@ namespace LMS.Repos
             try
             {
 
-                ScheduleWeek result = mSContext.RestaurantWeeks.FirstOrDefault(e => e.Id == id);
+                ScheduleWeek result = mSContext.ScheduleWeeks.FirstOrDefault(e => e.Id == id);
                 if (result == null)
                 {
                     return false;
@@ -112,28 +126,22 @@ namespace LMS.Repos
             }
 
         }
-        public class FilterRestaurantWeek
+        public class FilterScheduleWeek
         {
             public string Description { get; set; }
             public int IsActive { get; set; }
 
         }
-        public IQueryable<ScheduleWeek> SearchRestaurantWeek(FilterRestaurantWeek filter)
+        public IQueryable<ScheduleWeek> SearchScheduleWeek(FilterScheduleWeek filter)
         {
             IQueryable<ScheduleWeek> query = mSContext.Set<ScheduleWeek>();
             // assuming that you return all records when nothing is specified in the filter
 
-            //if (!string.IsNullOrEmpty(filter.Description))
-            //{
-            //    query = query.Where(t =>
-            //        t.Description.Contains(filter.Description));
-            //}
-            //if (filter.IsActive >= 0)
-            //{
-            //    bool val = (filter.IsActive == 1 ? true : false);
-            //    query = query.Where(t =>
-            //        t.IsActive == val);
-            //}
+            if (!string.IsNullOrEmpty(filter.Description))
+            {
+                query = query.Where(t =>
+                    t.WeekDecription.Contains(filter.Description));
+            }
             return query;
         }
     }

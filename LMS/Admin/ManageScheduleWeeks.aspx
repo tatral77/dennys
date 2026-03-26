@@ -1,11 +1,16 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Admin/AdminMaster.Master" AutoEventWireup="true" CodeBehind="ManageJobSchedules.aspx.cs" Inherits="LMS.Admin.ManageJobSchedules" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Admin/AdminMaster.Master" AutoEventWireup="true" CodeBehind="ManageScheduleWeeks.aspx.cs" Inherits="LMS.Admin.ManageScheduleWeeks" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
      <div class="row" style="padding-bottom: 5px">
-        <div class="col-md-6"><span style="font-size: 18pt">Job Schedules</span></div>
-        <div class="col-md-6" style="text-align: right">
-            <asp:Button ID="Button1" runat="server" CssClass="btn btn-success" Text="+" OnClick="AddButton_Click" /></div>
+        <div class="col-md-6"><span style="font-size: 18pt">Weeks</span></div>
+         <div class="col-md-4" style="text-align: right">
+             <asp:DropDownList ID="YearsDDL" runat="server" CssClass="form-control" OnSelectedIndexChanged="YearsDDL_SelectedIndexChanged" AutoPostBack="true">
+                 <asp:ListItem Value="0">Select Year</asp:ListItem>
+             </asp:DropDownList>
+             </div>
+        <div class="col-md-2" style="text-align: right">
+            <asp:Button ID="Button1" runat="server" CssClass="btn btn-success" Text="Generate Weeks" OnClick="GenerateWeeksBtn_Click" /></div>
     </div>
 
     <div class="row" style="background-color: #2258A2; padding-bottom: 10px; padding-left: 10px; color: white; border-radius: 5px">
@@ -49,8 +54,8 @@
                         <th>Description</th>
                         <th>Forcast Sale</th>
                         <th>Budget Percentage</th>
-                        <th>Created On</th>
-                        <th>Is Active</th>
+                       <%-- <th>Created On</th>
+                        <th>Is Active</th>--%>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -61,7 +66,7 @@
                             <asp:ListItem Value="2">2</asp:ListItem>
                             <asp:ListItem Value="4">4</asp:ListItem>
                         </asp:DropDownList>
-                        <asp:DataPager ID="DataPager1" runat="server" PagedControlID="LV" PageSize="5">
+                        <asp:DataPager ID="DataPager1" runat="server" PagedControlID="LV" PageSize="60">
                             <Fields>
                                 <asp:NextPreviousPagerField ButtonType="Button" ShowFirstPageButton="true" ShowPreviousPageButton="false"
                                     ShowNextPageButton="true" />
@@ -91,7 +96,7 @@
 
                 <td>
                    
-                   <asp:Label ID="Name" runat="server" Text='<%#Eval("Description")%>'></asp:Label>
+                   <asp:Label ID="Name" runat="server" Text='<%#Eval("WeekDecription")%>'></asp:Label>
                 </td>
                  
                  <td>
@@ -100,19 +105,19 @@
                  <td>
                     <asp:Label ID="ghgh" runat="server" Text='<%#Eval("Percentage")%>'></asp:Label>
                 </td>
-                   <td>
+                 <%--  <td>
                     <asp:Label ID="createdon" runat="server" Text='<%#Eval("CreatedOn")%>'></asp:Label>
                 </td>
 
                <td>
                     <asp:Label ID="Label3" runat="server" Text='<%#(Convert.ToBoolean(Eval("IsActive"))==true)?"Yes":"No"%>'></asp:Label>
-                </td>
+                </td>--%>
 
                 <td>
                      <asp:LinkButton ID="editImageButton" class="btn btn-warning" runat="server" CommandName="edit"
                         ToolTip="Edit"><span class="glyphicon glyphicon-pencil"></span></asp:LinkButton>
-                     <a href="ManageEmployeeJobSchedule.aspx?Id=<%#Eval("Id")%>" class="btn btn-success">Employees Schedule </a>
-                     <a href="WeeklyScheduleCalendar.aspx?Id=<%#Eval("Id")%>" class="btn btn-success">View Schedule</a>
+                     <a href="<%#GetEmployeeScheduleLink(Convert.ToInt32(Eval("Id")))%>" class="btn btn-success">Employees Schedule </a>
+                     <a href="<%#GetCalendarLink(Convert.ToInt32(Eval("Id")))%>" class="btn btn-success">View Schedule</a>
                        <%--  <asp:LinkButton ID="deleteImageButton" class="btn btn-danger" runat="server" CommandName="delete"
                         ToolTip="Delete" OnClientClick="return confirm('Are you sure you want to delete record ?');"><span class="glyphicon glyphicon-erase"></span></asp:LinkButton>--%>
                 </td>
@@ -144,12 +149,12 @@
                         ControlToValidate="PercentageTxt">
                     </asp:RequiredFieldValidator>
                 </td>
-                 <td>
+                <%-- <td>
                     <asp:DropDownList ID="IsActiveDDL" class="form-control control-txt" runat="server">
                         <asp:ListItem Value="true">Yes</asp:ListItem>
                         <asp:ListItem Value="false">No</asp:ListItem>
                     </asp:DropDownList>
-                </td>
+                </td>--%>
                 <td></td>
                 <td></td>
                 <td>
@@ -164,13 +169,13 @@
         <EditItemTemplate>
             <tr>
                 <asp:HiddenField ID="HidId" runat="server" Value='<%#Eval("Id")%>' />
-                   <asp:HiddenField ID="HidIsActive" runat="server" Value='<%#Eval("IsActive")%>' />
+                 <%--  <asp:HiddenField ID="HidIsActive" runat="server" Value='<%#Eval("IsActive")%>' />--%>
                 <td>
                     <asp:Label ID="SrNo" runat="server" Text='<%#Container.DataItemIndex + 1%> '></asp:Label>
                 </td>
 
                 <td>
-                    <asp:TextBox ID="DescriptionTxt" class="form-control control-txt" runat="server" Text='<%#Bind("Description")%>'></asp:TextBox>
+                    <asp:TextBox ID="DescriptionTxt" class="form-control control-txt" runat="server" Text='<%#Bind("WeekDecription")%>'></asp:TextBox>
                     <asp:RequiredFieldValidator ID="FV_Name" runat="server" ValidationGroup="g1"
                         ErrorMessage="Required" Style="color: red"
                         ControlToValidate="DescriptionTxt">
@@ -190,13 +195,13 @@
                         ControlToValidate="PercentageTxt">
                     </asp:RequiredFieldValidator>
                 </td>
-                  <td>
+                <%--  <td>
                     <asp:DropDownList ID="IsActiveDDL" class="form-control control-txt" runat="server">
                         <asp:ListItem Value="true">Yes</asp:ListItem>
                         <asp:ListItem Value="false">No</asp:ListItem>
                     </asp:DropDownList>
 
-                <td>
+                <td>--%>
 
                 <td>
                      <asp:LinkButton ID="cancelImageButton" class="btn btn-warning" runat="server" CommandName="cancel"

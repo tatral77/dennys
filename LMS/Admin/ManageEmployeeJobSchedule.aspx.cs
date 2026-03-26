@@ -13,8 +13,8 @@ namespace LMS.Admin
     public partial class ManageEmployeeJobSchedule : System.Web.UI.Page
     {
         EmployeeJobRepo employeeJobRepo=new EmployeeJobRepo();
-        JobScheduleRepo jobScheduleRepo = new JobScheduleRepo();
-        EmployeeJobScheduleRepo EmployeeJobScheduleScheduleRepo = new EmployeeJobScheduleRepo();
+        ScheduleWeekRepo scheduleWeekRepo = new ScheduleWeekRepo();
+        EmployeeJobScheduleRepo EmployeeJobScheduleRepo = new EmployeeJobScheduleRepo();
         string lastrec = "";
         int i = 0;
         protected void Page_Load(object sender, EventArgs e)
@@ -28,15 +28,15 @@ namespace LMS.Admin
         }
         protected void BindListView()
         {
-            int JobScheduleId = Convert.ToInt32(Request.QueryString["Id"]);
-            JobSchedule js = jobScheduleRepo.GetJobSchedule(JobScheduleId);
+            int Week = Convert.ToInt32(Request.QueryString["Id"]);
+            ScheduleWeek js = scheduleWeekRepo.GetScheduleWeek(Week);
          
             int EmployeeJobId = Convert.ToInt32(JobTitleDDL.SelectedValue);
             List<EmployeeJobSchedule> employeeJobSchedules = new List<EmployeeJobSchedule>();
             if (EmployeeJobId==0)
-                employeeJobSchedules= EmployeeJobScheduleScheduleRepo.GetEmployeeJobSchedules(JobScheduleId);
+                employeeJobSchedules= EmployeeJobScheduleRepo.GetEmployeeJobSchedules(Week);
             else
-                employeeJobSchedules = EmployeeJobScheduleScheduleRepo.GetScheduleByEmployeeJob(JobScheduleId, EmployeeJobId);
+                employeeJobSchedules = EmployeeJobScheduleRepo.GetScheduleByEmployeeJob(Week, EmployeeJobId);
             if (employeeJobSchedules != null)
             {
                 var data = employeeJobSchedules
@@ -72,7 +72,7 @@ namespace LMS.Admin
                     GrandTotal += ejs.TotalOverTimeAmount;
                 }
                 double TotalBudget= (js.ForcastedSale * js.Percentage) / 100;
-                Budget.InnerText ="Total Budget (" + TotalBudget + ")    "   + "Remaining Budget(" + (((js.ForcastedSale * js.Percentage) / 100) - EmployeeJobScheduleScheduleRepo.GetTotalExpenses(JobScheduleId)) + ")";
+                Budget.InnerText ="Total Budget (" + TotalBudget + ")    "   + "Remaining Budget(" + (((js.ForcastedSale * js.Percentage) / 100) - EmployeeJobScheduleRepo.GetTotalExpenses(Week)) + ")";
                 lvEmployees.DataSource = data;// EmployeeJobScheduleScheduleRepo.GetEmployeeJobSchedules(JobScheduleId);
                 lvEmployees.DataBind();
             }
@@ -92,29 +92,59 @@ namespace LMS.Admin
         }
         protected void BindCombos()
         {
-           
-            DayOfWeek startDay = DayOfWeek.Thursday;
-            DayOfWeek endDay = DayOfWeek.Wednesday;
-
-            DayOfWeek current = startDay;
-
-            do
+            int Week = Convert.ToInt32(Request.QueryString["Id"]);
+            ScheduleWeek scheduleWeek = scheduleWeekRepo.GetScheduleWeek(Week);
+            for(DateTime weekDay=scheduleWeek.WeekStartDate;weekDay<=scheduleWeek.WeekEndDate; weekDay=weekDay.AddDays(1))
             {
-                // Text = Day Name, Value = Day ID (0–6)
-                StartWeekDayDDL.Items.Add(
-               
-                    new ListItem(current.ToString(), ((int)current).ToString())
+                ListItem li = new ListItem();
+                li.Value = weekDay.ToShortDateString();
+                li.Text = weekDay.ToString("dddd, dd MMMM yyyy");
+                StartWeekDayDDL.Items.Add(li);
+                EndWeekDayDDL.Items.Add(li);
+            }
+
+
+            DateTime startTime = DateTime.Today;              // 00:00
+            DateTime endTime = DateTime.Today.AddDays(1);     // next day 00:00
+
+            while (startTime < endTime)
+            {
+                StartTimeDDL.Items.Add(
+                    new ListItem(
+                        startTime.ToString("HH:mm"), // display (24-hour)
+                        startTime.ToString("HH:mm")  // value
+                    )
                 );
-                EndWeekDayDDL.Items.Add(
+                EndTimeDDL.Items.Add(
+                  new ListItem(
+                      startTime.ToString("HH:mm"), // display (24-hour)
+                      startTime.ToString("HH:mm")  // value
+                  )
+              );
+                startTime = startTime.AddMinutes(30);
+            }
+            //DayOfWeek startDay = DayOfWeek.Thursday;
+            //DayOfWeek endDay = DayOfWeek.Wednesday;
 
-                    new ListItem(current.ToString(), ((int)current).ToString())
-                );
-                if (current == endDay)
-                    break;
+            //DayOfWeek current = startDay;
 
-                current = (DayOfWeek)(((int)current + 1) % 7);
+            //do
+            //{
+            //    // Text = Day Name, Value = Day ID (0–6)
+            //    StartWeekDayDDL.Items.Add(
 
-            } while (true);
+            //        new ListItem(current.ToString(), ((int)current).ToString())
+            //    );
+            //    EndWeekDayDDL.Items.Add(
+
+            //        new ListItem(current.ToString(), ((int)current).ToString())
+            //    );
+            //    if (current == endDay)
+            //        break;
+
+            //    current = (DayOfWeek)(((int)current + 1) % 7);
+
+            //} while (true);
             List<EmployeeJob> employeeJobs = employeeJobRepo.GetActive();
             if(employeeJobs!=null)
             {
@@ -144,30 +174,34 @@ namespace LMS.Admin
 
         protected void SaveBtn_Click(object sender, EventArgs e)
         {
-            int StartDay= Convert.ToInt32(StartWeekDayDDL.SelectedValue);
-            int Endday= Convert.ToInt32(EndWeekDayDDL.SelectedValue);
-            TimeSpan StartTime= TimeSpan.Parse(StartTimeTxt.Text);
-            TimeSpan EndTime = TimeSpan.Parse(EndTimeTxt.Text);
+            DateTime StartDate = Convert.ToDateTime(StartWeekDayDDL.SelectedValue);
+            DateTime EndDate = Convert.ToDateTime(EndWeekDayDDL.SelectedValue);
+            int StartDay = (int)StartDate.DayOfWeek;
+            int Endday= (int)EndDate.DayOfWeek;
+            TimeSpan StartTime= TimeSpan.Parse(StartTimeDDL.SelectedValue);
+            TimeSpan EndTime = TimeSpan.Parse(EndTimeDDL.SelectedValue);
             TimeSpan TimeLimit = new TimeSpan(7, 0, 0);
-            if (StartDay == 4 && Endday == 4 && EndTime > TimeLimit)
-            {
-                ErrorLbl.Text = "End Time should be less than Thursday 7:00 AM";
-            }
-            else
-            {
-                int JobScheduleId = Convert.ToInt32(Request.QueryString["Id"]);
+            //if (StartDay == 4 && Endday == 4 && EndTime > TimeLimit)
+            //{
+            //    ErrorLbl.Text = "End Time should be less than Thursday 7:00 AM";
+            //}
+            //else
+            //{
+                int Week = Convert.ToInt32(Request.QueryString["Id"]);
                 EmployeeJobSchedule employeeJobSchedule = new EmployeeJobSchedule();
-                employeeJobSchedule.JobScheduleId = JobScheduleId;
+                employeeJobSchedule.ScheduleWeekId = Week;
                 employeeJobSchedule.EmployeeJobId = Convert.ToInt32(JobTitleDDL.SelectedValue);
+                employeeJobSchedule.StartDate = StartDate;
+                employeeJobSchedule.EndDate = EndDate;
                 employeeJobSchedule.StartWeekDayId = StartDay;
                 employeeJobSchedule.EndWeekDayId = Endday;
                 employeeJobSchedule.StartTime = StartTime;
                 employeeJobSchedule.EndTime = EndTime;
                 employeeJobSchedule.IsActive = true;
-                EmployeeJobScheduleScheduleRepo.Add(employeeJobSchedule);
+                EmployeeJobScheduleRepo.Add(employeeJobSchedule);
                 BindListView();
                 ErrorLbl.Text = "";
-            }
+            //}
 
         }
         protected void LV_ItemInserting(object sender, ListViewInsertEventArgs e)
@@ -269,7 +303,7 @@ namespace LMS.Admin
             if (e.CommandName == "DeleteRow")
             {
                 int id = Convert.ToInt32(e.CommandArgument);
-                EmployeeJobScheduleScheduleRepo.Delete(id);
+                EmployeeJobScheduleRepo.Delete(id);
                 lvEmployees.EditIndex = -1;
                 lvEmployees.InsertItemPosition = InsertItemPosition.None;
                 BindListView();

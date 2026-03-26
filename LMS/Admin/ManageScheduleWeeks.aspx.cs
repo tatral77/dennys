@@ -1,4 +1,5 @@
-﻿using LMS.Models;
+﻿using LMS.Helper;
+using LMS.Models;
 using LMS.Repos;
 using System;
 using System.Collections.Generic;
@@ -6,30 +7,50 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using static LMS.Repos.JobScheduleRepo;
+using static LMS.Repos.ScheduleWeekRepo;
 
 namespace LMS.Admin
 {
-    public partial class ManageJobSchedules : System.Web.UI.Page
+    public partial class ManageScheduleWeeks : System.Web.UI.Page
     {
-        JobScheduleRepo repo = new JobScheduleRepo();
+        ScheduleWeekRepo repo = new ScheduleWeekRepo();
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
+                for (int i=2026;i<=2099;i++)
+                {
+                    ListItem li = new ListItem();
+                    li.Value = i.ToString();
+                    li.Text = i.ToString();
+                    YearsDDL.Items.Add(li);
+                }
                 bindLV();
             }
         }
         protected void bindLV()
         {
-            int locationId = Convert.ToInt32(Request.QueryString["Id"]);
-            List<JobSchedule> locations = repo.GetAll(locationId);
+            int Year = Convert.ToInt32(YearsDDL.SelectedValue);
+            List<ScheduleWeek> locations = repo.GetAll(Year);
             LV.DataSource = locations;
             LV.DataBind();
 
         }
-
+        protected void GenerateWeeksBtn_Click(object sender, EventArgs e)
+        {
+            int Year = Convert.ToInt32(YearsDDL.SelectedValue);
+            if (Year != 0)
+            {
+                List<ScheduleWeek> result = repo.GetAll(Year);
+                if (result.Count == 0)
+                {
+                    List<ScheduleWeek> restaurantWeeks = WeeksHelper.GenerateRestaurantWeeks(Year);
+                    repo.Add(restaurantWeeks);
+                }
+            }
+            bindLV();
+        }
         protected void AddButton_Click(object sender, EventArgs e)
         {
             LV.SelectedIndex = -1;
@@ -40,23 +61,21 @@ namespace LMS.Admin
 
         protected void LV_ItemInserting(object sender, ListViewInsertEventArgs e)
         {
-            int locationId = Convert.ToInt32(Request.QueryString["Id"]);
+            int Year = Convert.ToInt32(YearsDDL.SelectedValue);
             TextBox DescriptionTxt = (TextBox)LV.InsertItem.FindControl("DescriptionTxt");
             TextBox ForecastSaleTxt = (TextBox)LV.InsertItem.FindControl("ForecastSaleTxt");
             TextBox PercentageTxt = (TextBox)LV.InsertItem.FindControl("PercentageTxt");
-            JobSchedule jobSchedule = new JobSchedule();
-            jobSchedule.LocationId = locationId;
-            jobSchedule.Description = Convert.ToString(DescriptionTxt.Text);
+            ScheduleWeek jobSchedule = new ScheduleWeek();
+            jobSchedule.Year = Year;
+            jobSchedule.WeekDecription = Convert.ToString(DescriptionTxt.Text);
             jobSchedule.ForcastedSale = Convert.ToDouble(ForecastSaleTxt.Text);
             jobSchedule.Percentage = Convert.ToDouble(PercentageTxt.Text);
-            jobSchedule.IsActive = true;
-            jobSchedule.CreatedOn = DateTime.Now;
             repo.Add(jobSchedule);
             LV.EditIndex = -1;
             LV.InsertItemPosition = InsertItemPosition.None;
             bindLV();
             e.Cancel = true;
-            Response.Redirect("ManageJobSchedules.aspx?id=" + locationId);
+            Response.Redirect("ManageScheduleWeeks.aspx?id=" + Year);
         }
 
         protected void LV_ItemCreated(object sender, ListViewItemEventArgs e)
@@ -86,40 +105,38 @@ namespace LMS.Admin
 
         protected void LV_ItemUpdating(object sender, ListViewUpdateEventArgs e)
         {
-            int locationId = Convert.ToInt32(Request.QueryString["Id"]);
+            int Year = Convert.ToInt32(YearsDDL.SelectedValue);
             //DepartmentRepo dr = new DepartmentRepo(); 
             HiddenField Id = LV.EditItem.FindControl("HidId") as HiddenField;
             TextBox DescriptionTxt = (TextBox)LV.EditItem.FindControl("DescriptionTxt");
             TextBox ForecastSaleTxt = (TextBox)LV.EditItem.FindControl("ForecastSaleTxt");
             TextBox PercentageTxt = (TextBox)LV.EditItem.FindControl("PercentageTxt");
-            DropDownList IsActiveDDL = (DropDownList)LV.EditItem.FindControl("IsActiveDDL");
-            JobSchedule jobScheduleDTO = new JobSchedule();
+            ScheduleWeek jobScheduleDTO = new ScheduleWeek();
             jobScheduleDTO.Id = Convert.ToInt32(Id.Value);
-            jobScheduleDTO.Description = Convert.ToString(DescriptionTxt.Text);
+            jobScheduleDTO.WeekDecription = Convert.ToString(DescriptionTxt.Text);
             jobScheduleDTO.ForcastedSale = Convert.ToDouble(ForecastSaleTxt.Text);
             jobScheduleDTO.Percentage = Convert.ToDouble(PercentageTxt.Text);
-            jobScheduleDTO.IsActive = Convert.ToBoolean(IsActiveDDL.SelectedValue);
+            jobScheduleDTO.Year = Year;
             repo.Update(jobScheduleDTO);
             LV.EditIndex = -1;
             LV.InsertItemPosition = InsertItemPosition.None;
             bindLV();
             e.Cancel = true;
-            Response.Redirect("ManageJobSchedules.aspx?id=" + locationId);
-
+           // Response.Redirect("ManageScheduleWeeks.aspx?id=" + Year);
         }
 
         protected void LV_ItemDataBound(object sender, ListViewItemEventArgs e)
         {
-            if (LV.EditIndex == (e.Item as ListViewDataItem).DataItemIndex)
-            {
-                //    DropDownList MinistryDDL = e.Item.FindControl("MinistryDDL") as DropDownList;
-                //    HiddenField HidMinistriesId = (e.Item.FindControl("HidMinistriesId") as HiddenField);
-                //    MinistryDDL.SelectedValue = HidMinistriesId.Value.ToString();
+            //if (LV.EditIndex == (e.Item as ListViewDataItem).DataItemIndex)
+            //{
+            //    //    DropDownList MinistryDDL = e.Item.FindControl("MinistryDDL") as DropDownList;
+            //    //    HiddenField HidMinistriesId = (e.Item.FindControl("HidMinistriesId") as HiddenField);
+            //    //    MinistryDDL.SelectedValue = HidMinistriesId.Value.ToString();
 
-                DropDownList IsActiveDDL = e.Item.FindControl("IsActiveDDL") as DropDownList;
-                HiddenField HidIsActive = (e.Item.FindControl("HidIsActive") as HiddenField);
-                IsActiveDDL.SelectedValue = HidIsActive.Value.ToString();
-            }
+            //    DropDownList IsActiveDDL = e.Item.FindControl("IsActiveDDL") as DropDownList;
+            //    HiddenField HidIsActive = (e.Item.FindControl("HidIsActive") as HiddenField);
+            //    IsActiveDDL.SelectedValue = HidIsActive.Value.ToString();
+            //}
         }
 
         protected string GetStatus(int id)
@@ -133,7 +150,7 @@ namespace LMS.Admin
 
         protected void LV_ItemDeleting(object sender, ListViewDeleteEventArgs e)
         {
-            int locationId = Convert.ToInt32(Request.QueryString["Id"]);
+            int Year = Convert.ToInt32(YearsDDL.SelectedValue);
             HiddenField Id = (HiddenField)LV.Items[e.ItemIndex].FindControl("HidId");
             if (!string.IsNullOrEmpty(Id.Value))
             {
@@ -145,24 +162,24 @@ namespace LMS.Admin
                 LV.InsertItemPosition = InsertItemPosition.None;
                 bindLV();
                 e.Cancel = true;
-                Response.Redirect("ManageJobSchedules.aspx?id=" + locationId);
+                Response.Redirect("ManageScheduleWeeks.aspx?id=" + Year);
             }
         }
 
         protected void SearchBtn_Click(object sender, EventArgs e)
         {
-            FilterJobSchedule filterCategory = new FilterJobSchedule();
-            filterCategory.IsActive = -1;
-            if (!string.IsNullOrEmpty(DescriptionTxt.Text))
-            {
-                filterCategory.Description = DescriptionTxt.Text;
-            }
-            if (Convert.ToInt32(IsActiveDDL.SelectedValue) != -1)
-            {
-                filterCategory.IsActive = Convert.ToInt32(IsActiveDDL.SelectedValue);
-            }
-            LV.DataSource = repo.SearchJobSchedule(filterCategory).ToList();
-            LV.DataBind();
+            //FilterJobSchedule filterCategory = new FilterJobSchedule();
+            //filterCategory.IsActive = -1;
+            //if (!string.IsNullOrEmpty(DescriptionTxt.Text))
+            //{
+            //    filterCategory.Description = DescriptionTxt.Text;
+            //}
+            //if (Convert.ToInt32(IsActiveDDL.SelectedValue) != -1)
+            //{
+            //    filterCategory.IsActive = Convert.ToInt32(IsActiveDDL.SelectedValue);
+            //}
+            //LV.DataSource = repo.SearchJobSchedule(filterCategory).ToList();
+            //LV.DataBind();
         }
 
         protected void LV_PagePropertiesChanging(object sender, PagePropertiesChangingEventArgs e)
@@ -194,5 +211,20 @@ namespace LMS.Admin
             bindLV();
         }
 
+        protected void YearsDDL_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            bindLV();
+        }
+
+        protected string GetEmployeeScheduleLink(int WeekId)
+        {
+            int LocationId = Convert.ToInt32(Request.QueryString["Id"]);
+            return "ManageEmployeeJobSchedule.aspx?Id=" + WeekId + "&LocationId=" + LocationId;
+        }
+        protected string GetCalendarLink(int WeekId)
+        {
+            int LocationId = Convert.ToInt32(Request.QueryString["Id"]);
+            return "WeeklyScheduleCalendar.aspx?Id=" + WeekId + "&LocationId=" + LocationId;
+        }
     }
 }

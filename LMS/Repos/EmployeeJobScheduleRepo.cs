@@ -19,12 +19,12 @@ namespace LMS.Repos
             JobTitleRepo = new JobTitleRepo();
             employeeRepo = new EmployeeRepo();
         }
-        public List<EmployeeJobSchedule> GetAll(int JobScheduleId)
+        public List<EmployeeJobSchedule> GetAll(int WeekId)
         {
             ApplicationDbContext _Context2 = new ApplicationDbContext();
             try
             {
-                List<EmployeeJobSchedule> employeeJobSchedules = _Context2.EmployeeJobSchedules.Include("EmployeeJob").Include("JobSchedule").Where(e=> e.JobScheduleId == JobScheduleId).OrderBy(e => (e.StartWeekDayId + 3) % 7).ThenBy(e => e.StartTime).ToList();
+                List<EmployeeJobSchedule> employeeJobSchedules = _Context2.EmployeeJobSchedules.Include("EmployeeJob").Include("JobSchedule").Where(e=> e.ScheduleWeekId == WeekId).OrderBy(e => (e.StartWeekDayId + 3) % 7).ThenBy(e => e.StartTime).ToList();
                 return CalculateTimeAndWages(employeeJobSchedules);
             }
             catch
@@ -128,13 +128,13 @@ namespace LMS.Repos
             }
 
         }
-        public List<EmployeeJobSchedule> GetEmployeeJobSchedules(int JobScheduleId)
+        public List<EmployeeJobSchedule> GetEmployeeJobSchedules(int WeekId)
         {
             ApplicationDbContext _Context2=new ApplicationDbContext();
             try
             {
                 
-                List<EmployeeJobSchedule> employeeJobSchedules = _Context2.EmployeeJobSchedules.Include("EmployeeJob").Include("JobSchedule").Where(e => e.IsActive == true && e.JobScheduleId== JobScheduleId).OrderBy(e => (e.StartWeekDayId + 3) % 7).ThenBy(e => e.StartTime).ToList();
+                List<EmployeeJobSchedule> employeeJobSchedules = _Context2.EmployeeJobSchedules.Include("EmployeeJob").Include("ScheduleWeek").Where(e => e.IsActive == true && e.ScheduleWeekId== WeekId).OrderBy(e => (e.StartWeekDayId + 3) % 7).ThenBy(e => e.StartTime).ToList();
                 return CalculateTimeAndWages(employeeJobSchedules);
             }
             catch
@@ -143,11 +143,11 @@ namespace LMS.Repos
             }
 
         }
-        public List<EmployeeJobSchedule> GetScheduleByEmployeeJob(int JobScheduleId, int EmployeeJobId)
+        public List<EmployeeJobSchedule> GetScheduleByEmployeeJob(int WeekId, int EmployeeJobId)
         {
             if(EmployeeJobId==0)
             {
-                return GetEmployeeJobSchedules(JobScheduleId);
+                return GetEmployeeJobSchedules(WeekId);
             }
             ApplicationDbContext _Context2 = new ApplicationDbContext();
             try
@@ -157,9 +157,9 @@ namespace LMS.Repos
                 //    return CalculateTimeAndWages(employeeJobSchedules);
                 //else
                 //    return null;
-                List<EmployeeJobSchedule> employeeJobSchedules = GetAll(JobScheduleId);// _Context2.EmployeeJobSchedules.Include("EmployeeJob").Include("JobSchedule").Where(e => e.IsActive == true && e.JobScheduleId == JobScheduleId).OrderBy(e =>(e.StartWeekDayId + 3) % 7).ThenBy(e=>e.StartTime).ToList();
+                List<EmployeeJobSchedule> employeeJobSchedules = GetAll(WeekId);// _Context2.EmployeeJobSchedules.Include("EmployeeJob").Include("JobSchedule").Where(e => e.IsActive == true && e.JobScheduleId == JobScheduleId).OrderBy(e =>(e.StartWeekDayId + 3) % 7).ThenBy(e=>e.StartTime).ToList();
                 List<EmployeeJobSchedule> CalculatedEmployeeJobSchedules = CalculateTimeAndWages(employeeJobSchedules);
-                return CalculatedEmployeeJobSchedules.Where(e => e.EmployeeJobId == EmployeeJobId && e.JobScheduleId == JobScheduleId).ToList();
+                return CalculatedEmployeeJobSchedules.Where(e => e.EmployeeJobId == EmployeeJobId && e.ScheduleWeekId == WeekId).ToList();
             }
             catch(Exception ex)
             {
@@ -225,16 +225,16 @@ namespace LMS.Repos
             }
 
         }
-        public List<EmployeeJobSchedule> GetScheduleByEmployeeId(int JobScheduleId, int EmployeeId)
+        public List<EmployeeJobSchedule> GetScheduleByEmployeeId(int WeekId, int EmployeeId)
         {
             ApplicationDbContext _Context2 = new ApplicationDbContext();
             try
             {
                 //List<EmployeeJobSchedule> employeeJobSchedules = _Context2.EmployeeJobSchedules.Include("EmployeeJob").Include("JobSchedule").Where(e => e.EmployeeJob.EmployeeId == EmployeeId && e.JobScheduleId == JobScheduleId).OrderBy(e => (e.StartWeekDayId + 3) % 7).ThenBy(e => e.StartTime).ToList();
                 //return CalculateTimeAndWages(employeeJobSchedules);
-                List<EmployeeJobSchedule> employeeJobSchedules = GetAll(JobScheduleId);// _Context2.EmployeeJobSchedules.Include("EmployeeJob").Include("JobSchedule").Where(e => e.IsActive == true && e.JobScheduleId == JobScheduleId).OrderBy(e =>(e.StartWeekDayId + 3) % 7).ThenBy(e=>e.StartTime).ToList();
+                List<EmployeeJobSchedule> employeeJobSchedules = GetAll(WeekId);// _Context2.EmployeeJobSchedules.Include("EmployeeJob").Include("JobSchedule").Where(e => e.IsActive == true && e.JobScheduleId == JobScheduleId).OrderBy(e =>(e.StartWeekDayId + 3) % 7).ThenBy(e=>e.StartTime).ToList();
                 List<EmployeeJobSchedule> CalculatedEmployeeJobSchedules = CalculateTimeAndWages(employeeJobSchedules);
-                return CalculatedEmployeeJobSchedules.Where(e => e.EmployeeJob.EmployeeId == EmployeeId && e.JobScheduleId == JobScheduleId).ToList();
+                return CalculatedEmployeeJobSchedules.Where(e => e.EmployeeJob.EmployeeId == EmployeeId && e.ScheduleWeekId == WeekId).ToList();
             }
             catch
             {
@@ -298,7 +298,7 @@ namespace LMS.Repos
                 {
                     return false;
                 }
-                result.JobScheduleId = entity.JobScheduleId;
+                result.ScheduleWeekId = entity.ScheduleWeekId;
                 result.EmployeeJobId = entity.EmployeeJobId;
                 result.StartWeekDayId = entity.StartWeekDayId;
                 result.StartTime = entity.StartTime;

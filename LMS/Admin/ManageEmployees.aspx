@@ -60,7 +60,7 @@
                             <asp:ListItem Value="2">2</asp:ListItem>
                             <asp:ListItem Value="4">4</asp:ListItem>
                         </asp:DropDownList>
-                        <asp:DataPager ID="DataPager1" runat="server" PagedControlID="LV" PageSize="5">
+                        <asp:DataPager ID="DataPager1" runat="server" PagedControlID="LV" PageSize="100">
                             <Fields>
                                 <asp:NextPreviousPagerField ButtonType="Button" ShowFirstPageButton="true" ShowPreviousPageButton="false"
                                     ShowNextPageButton="true" />

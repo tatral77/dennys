@@ -14,7 +14,7 @@ namespace LMS.Admin
     {
         EmployeeJobRepo employeeJobRepo = new EmployeeJobRepo();
         JobTitleRepo JobTitleRepo = new JobTitleRepo();
-        JobScheduleRepo jobScheduleRepo = new JobScheduleRepo();
+        ScheduleWeek scheduleWeek = new ScheduleWeek();
         EmployeeJobScheduleRepo EmployeeJobScheduleScheduleRepo = new EmployeeJobScheduleRepo();
         protected void Page_Load(object sender, EventArgs e)
         {

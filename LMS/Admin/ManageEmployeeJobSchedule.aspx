@@ -35,7 +35,7 @@
             </div>
             <div class="col-md-2">Start Time</div>
             <div class="col-md-4">
-                <asp:TextBox ID="StartTimeTxt" class="form-control control-txt" runat="server" Type="Time"></asp:TextBox>
+               <asp:DropDownList ID="StartTimeDDL" class="form-control control-txt" runat="server"></asp:DropDownList>
             </div>
         </div>
         <div class="row" style="margin-bottom:5px">
@@ -47,7 +47,7 @@
             </div>
             <div class="col-md-2">End Time</div>
             <div class="col-md-4">
-                <asp:TextBox ID="EndTimeTxt" class="form-control control-txt" runat="server"  Type="Time"></asp:TextBox>
+                <asp:DropDownList ID="EndTimeDDL" class="form-control control-txt" runat="server"></asp:DropDownList>
             </div>
         </div>
         <div class="row">

@@ -51,13 +51,13 @@ namespace LMS.Admin
         protected global::System.Web.UI.WebControls.DropDownList StartWeekDayDDL;
 
         /// <summary>
-        /// StartTimeTxt control.
+        /// StartTimeDDL control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox StartTimeTxt;
+        protected global::System.Web.UI.WebControls.DropDownList StartTimeDDL;
 
         /// <summary>
         /// EndWeekDayDDL control.
@@ -69,13 +69,13 @@ namespace LMS.Admin
         protected global::System.Web.UI.WebControls.DropDownList EndWeekDayDDL;
 
         /// <summary>
-        /// EndTimeTxt control.
+        /// EndTimeDDL control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox EndTimeTxt;
+        protected global::System.Web.UI.WebControls.DropDownList EndTimeDDL;
 
         /// <summary>
         /// SaveBtn control.

@@ -100,7 +100,7 @@
                      <asp:LinkButton ID="editImageButton" class="btn btn-warning" runat="server" CommandName="edit"
                         ToolTip="Edit"><span class="glyphicon glyphicon-pencil"></span></asp:LinkButton>
                      <a href="ManageEmployees.aspx?Id=<%#Eval("Id")%>" class="btn btn-success">Employees </a>
-                     <a href="ManageJobSchedules.aspx?Id=<%#Eval("Id")%>" class="btn btn-success">Schedule</a>
+                     <a href="ManageScheduleWeeks.aspx?Id=<%#Eval("Id")%>" class="btn btn-success">Schedule</a>
                 </td>
             </tr>
         </ItemTemplate>

@@ -36,9 +36,8 @@ namespace LMS.Models
         public virtual DbSet<EmployeeJob> EmployeeJobs { get; set; }
         public virtual DbSet<EmployeeJobSchedule> EmployeeJobSchedules { get; set; }
         public virtual DbSet<JobTitle> JobTitles { get; set; }
-        public virtual DbSet<JobSchedule> JobSchedules { get; set; }
+        public virtual DbSet<ScheduleWeek> ScheduleWeeks { get; set; }
         public virtual DbSet<EmployeeWeeklyJob> EmployeeWeeklyJobs { get; set; }
-        public virtual DbSet<ScheduleWeek> RestaurantWeeks { get; set; }
         public virtual DbSet<SalaryType> SalaryTypes { get; set; }
 
 

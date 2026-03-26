@@ -172,9 +172,8 @@
     <Content Include="Admin\ManageEmployeeJobSchedule.aspx" />
     <Content Include="Admin\ManageEmployees.aspx" />
     <Content Include="Admin\ManageEmployeeSalaryJob.aspx" />
-    <Content Include="Admin\ManageJobSchedules.aspx" />
+    <Content Include="Admin\ManageScheduleWeeks.aspx" />
     <Content Include="Admin\ManageLocations.aspx" />
-    <Content Include="Admin\ManageRestaurantWeeks.aspx" />
     <Content Include="Admin\ManageUsers.aspx" />
     <Content Include="Admin\WeeklyReport.aspx" />
     <Content Include="Admin\WeeklyScheduleCalendar.aspx" />
@@ -391,12 +390,12 @@
     <Compile Include="Admin\ManageEmployeeSalaryJob.aspx.designer.cs">
       <DependentUpon>ManageEmployeeSalaryJob.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Admin\ManageJobSchedules.aspx.cs">
-      <DependentUpon>ManageJobSchedules.aspx</DependentUpon>
+    <Compile Include="Admin\ManageScheduleWeeks.aspx.cs">
+      <DependentUpon>ManageScheduleWeeks.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Admin\ManageJobSchedules.aspx.designer.cs">
-      <DependentUpon>ManageJobSchedules.aspx</DependentUpon>
+    <Compile Include="Admin\ManageScheduleWeeks.aspx.designer.cs">
+      <DependentUpon>ManageScheduleWeeks.aspx</DependentUpon>
     </Compile>
     <Compile Include="Admin\ManageLocations.aspx.cs">
       <DependentUpon>ManageLocations.aspx</DependentUpon>
@@ -404,13 +403,6 @@
     </Compile>
     <Compile Include="Admin\ManageLocations.aspx.designer.cs">
       <DependentUpon>ManageLocations.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Admin\ManageRestaurantWeeks.aspx.cs">
-      <DependentUpon>ManageRestaurantWeeks.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Admin\ManageRestaurantWeeks.aspx.designer.cs">
-      <DependentUpon>ManageRestaurantWeeks.aspx</DependentUpon>
     </Compile>
     <Compile Include="Admin\ManageUsers.aspx.cs">
       <DependentUpon>ManageUsers.aspx</DependentUpon>
@@ -466,9 +458,13 @@
     <Compile Include="Helper\WeeklyPaymentByJob.cs" />
     <Compile Include="Helper\WeeklyPaymentResult.cs" />
     <Compile Include="Helper\WeeksHelper.cs" />
-    <Compile Include="Migrations\202603180739493_Seeding Added.cs" />
-    <Compile Include="Migrations\202603180739493_Seeding Added.Designer.cs">
-      <DependentUpon>202603180739493_Seeding Added.cs</DependentUpon>
+    <Compile Include="Migrations\202603260731538_ini.cs" />
+    <Compile Include="Migrations\202603260731538_ini.Designer.cs">
+      <DependentUpon>202603260731538_ini.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202603261005226_init.cs" />
+    <Compile Include="Migrations\202603261005226_init.Designer.cs">
+      <DependentUpon>202603261005226_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Employee.cs" />
@@ -487,10 +483,9 @@
     <Compile Include="Repos\EmployeeJobScheduleRepo.cs" />
     <Compile Include="Repos\EmployeeRepo.cs" />
     <Compile Include="Repos\EmployeeWeeklyJobRepo.cs" />
-    <Compile Include="Repos\JobScheduleRepo.cs" />
+    <Compile Include="Repos\ScheduleWeekRepo.cs" />
     <Compile Include="Repos\JobTitleRepo.cs" />
     <Compile Include="Repos\LocationRepo.cs" />
-    <Compile Include="Repos\RestaurantWeekRepo.cs" />
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -519,8 +514,11 @@
     <Folder Include="Users\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202603180739493_Seeding Added.resx">
-      <DependentUpon>202603180739493_Seeding Added.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202603260731538_ini.resx">
+      <DependentUpon>202603260731538_ini.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202603261005226_init.resx">
+      <DependentUpon>202603261005226_init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -13,8 +13,11 @@ namespace LMS.Admin
 {
     public partial class ManageScheduleWeeks : System.Web.UI.Page
     {
-        ScheduleWeekRepo repo = new ScheduleWeekRepo();
-
+        ScheduleWeekRepo scheduleWeekRepo = new ScheduleWeekRepo();
+        ScheduleWeekRepo GetscheduleWeekRepo = new ScheduleWeekRepo();
+        LocationWeekRepo locationWeekRepo = new LocationWeekRepo();
+        LocationWeekRepo GetlocationWeekRepo = new LocationWeekRepo();
+        LocationRepo locationrepo = new LocationRepo();
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -31,8 +34,11 @@ namespace LMS.Admin
         }
         protected void bindLV()
         {
+            int locationId = Convert.ToInt32(Request.QueryString["Id"]);
+            Location location = locationrepo.GetLocation(locationId);
+            LocationDetail.InnerText = location.Name + " ( Weeks )";
             int Year = Convert.ToInt32(YearsDDL.SelectedValue);
-            List<ScheduleWeek> locations = repo.GetAll(Year);
+            List<LocationWeek> locations = GetlocationWeekRepo.GetAll(locationId,Year);
             LV.DataSource = locations;
             LV.DataBind();
 
@@ -42,15 +48,44 @@ namespace LMS.Admin
             int Year = Convert.ToInt32(YearsDDL.SelectedValue);
             if (Year != 0)
             {
-                List<ScheduleWeek> result = repo.GetAll(Year);
+                List<ScheduleWeek> result = scheduleWeekRepo.GetAll(Year);
                 if (result.Count == 0)
                 {
                     List<ScheduleWeek> restaurantWeeks = WeeksHelper.GenerateRestaurantWeeks(Year);
-                    repo.Add(restaurantWeeks);
+                    scheduleWeekRepo.Add(restaurantWeeks);
+                
+                }
+                GenerateLocationWeeks(Year);
+            }
+           
+            bindLV();
+        }
+        protected void GenerateLocationWeeks(int Year)
+        {
+            int locationId = Convert.ToInt32(Request.QueryString["Id"]);
+            if (Year != 0)
+            {
+                List<LocationWeek> result = locationWeekRepo.GetAll(locationId, Year);
+                if (result.Count == 0)
+                {
+                    List<ScheduleWeek> scheduleWeeks = GetscheduleWeekRepo.GetAll(Year);
+                    List<LocationWeek> locationWeeks = new List<LocationWeek>();
+                    foreach(ScheduleWeek scheduleWeek in scheduleWeeks)
+                    {
+                        LocationWeek locationWeek = new LocationWeek();
+                        locationWeek.LocationId = locationId;
+                        locationWeek.ScheduleWeekId = scheduleWeek.Id;
+                        locationWeek.ForcastedSale = 0;
+                        locationWeek.Percentage = 0;
+                        locationWeeks.Add(locationWeek);
+
+                    }
+                    locationWeekRepo.Add(locationWeeks);
                 }
             }
             bindLV();
         }
+
         protected void AddButton_Click(object sender, EventArgs e)
         {
             LV.SelectedIndex = -1;
@@ -61,21 +96,21 @@ namespace LMS.Admin
 
         protected void LV_ItemInserting(object sender, ListViewInsertEventArgs e)
         {
-            int Year = Convert.ToInt32(YearsDDL.SelectedValue);
-            TextBox DescriptionTxt = (TextBox)LV.InsertItem.FindControl("DescriptionTxt");
-            TextBox ForecastSaleTxt = (TextBox)LV.InsertItem.FindControl("ForecastSaleTxt");
-            TextBox PercentageTxt = (TextBox)LV.InsertItem.FindControl("PercentageTxt");
-            ScheduleWeek jobSchedule = new ScheduleWeek();
-            jobSchedule.Year = Year;
-            jobSchedule.WeekDecription = Convert.ToString(DescriptionTxt.Text);
-            jobSchedule.ForcastedSale = Convert.ToDouble(ForecastSaleTxt.Text);
-            jobSchedule.Percentage = Convert.ToDouble(PercentageTxt.Text);
-            repo.Add(jobSchedule);
-            LV.EditIndex = -1;
-            LV.InsertItemPosition = InsertItemPosition.None;
-            bindLV();
-            e.Cancel = true;
-            Response.Redirect("ManageScheduleWeeks.aspx?id=" + Year);
+            //int Year = Convert.ToInt32(YearsDDL.SelectedValue);
+            //TextBox DescriptionTxt = (TextBox)LV.InsertItem.FindControl("DescriptionTxt");
+            //TextBox ForecastSaleTxt = (TextBox)LV.InsertItem.FindControl("ForecastSaleTxt");
+            //TextBox PercentageTxt = (TextBox)LV.InsertItem.FindControl("PercentageTxt");
+            //ScheduleWeek jobSchedule = new ScheduleWeek();
+            //jobSchedule.Year = Year;
+            //jobSchedule.WeekDecription = Convert.ToString(DescriptionTxt.Text);
+            //jobSchedule.ForcastedSale = Convert.ToDouble(ForecastSaleTxt.Text);
+            //jobSchedule.Percentage = Convert.ToDouble(PercentageTxt.Text);
+            //repo.Add(jobSchedule);
+            //LV.EditIndex = -1;
+            //LV.InsertItemPosition = InsertItemPosition.None;
+            //bindLV();
+            //e.Cancel = true;
+            //Response.Redirect("ManageScheduleWeeks.aspx?id=" + Year);
         }
 
         protected void LV_ItemCreated(object sender, ListViewItemEventArgs e)
@@ -105,19 +140,20 @@ namespace LMS.Admin
 
         protected void LV_ItemUpdating(object sender, ListViewUpdateEventArgs e)
         {
-            int Year = Convert.ToInt32(YearsDDL.SelectedValue);
-            //DepartmentRepo dr = new DepartmentRepo(); 
-            HiddenField Id = LV.EditItem.FindControl("HidId") as HiddenField;
+            int locationId = Convert.ToInt32(Request.QueryString["Id"]);
+            HiddenField HidId = LV.EditItem.FindControl("HidId") as HiddenField;
+            HiddenField HidWeekId = LV.EditItem.FindControl("HidWeekId") as HiddenField;
             TextBox DescriptionTxt = (TextBox)LV.EditItem.FindControl("DescriptionTxt");
             TextBox ForecastSaleTxt = (TextBox)LV.EditItem.FindControl("ForecastSaleTxt");
             TextBox PercentageTxt = (TextBox)LV.EditItem.FindControl("PercentageTxt");
-            ScheduleWeek jobScheduleDTO = new ScheduleWeek();
-            jobScheduleDTO.Id = Convert.ToInt32(Id.Value);
-            jobScheduleDTO.WeekDecription = Convert.ToString(DescriptionTxt.Text);
-            jobScheduleDTO.ForcastedSale = Convert.ToDouble(ForecastSaleTxt.Text);
-            jobScheduleDTO.Percentage = Convert.ToDouble(PercentageTxt.Text);
-            jobScheduleDTO.Year = Year;
-            repo.Update(jobScheduleDTO);
+            LocationWeek jobSchedule = new LocationWeek();
+            jobSchedule.ScheduleWeekId=Convert.ToInt32(HidWeekId.Value); ;
+            jobSchedule.Id = Convert.ToInt32(HidId.Value);
+            //jobSchedule.Description = Convert.ToString(DescriptionTxt.Text);
+            jobSchedule.ForcastedSale = Convert.ToDouble(ForecastSaleTxt.Text);
+            jobSchedule.Percentage = Convert.ToDouble(PercentageTxt.Text);
+            jobSchedule.LocationId = locationId;
+            locationWeekRepo.Update(jobSchedule);
             LV.EditIndex = -1;
             LV.InsertItemPosition = InsertItemPosition.None;
             bindLV();
@@ -156,7 +192,7 @@ namespace LMS.Admin
             {
                 int id = Convert.ToInt32(Id.Value);
 
-                repo.Delete(id);
+                scheduleWeekRepo.Delete(id);
 
                 LV.EditIndex = -1;
                 LV.InsertItemPosition = InsertItemPosition.None;

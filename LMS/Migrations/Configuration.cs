@@ -15,21 +15,21 @@ namespace LMS.Migrations
         {
             AutomaticMigrationsEnabled = false;
         }
-        protected void OnModelCreating(DbModelBuilder modelBuilder)
+        public void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<JobSchedule>()
-                .HasRequired(js => js.Location)   // or HasOptional if nullable
-                .WithMany(l => l.JobSchedules)    // or .WithMany() if no navigation property
-                .HasForeignKey(js => js.LocationId)
-                .WillCascadeOnDelete(false);     
+            //modelBuilder.Entity<JobSchedule>()
+            //    .HasRequired(js => js.Location)   // or HasOptional if nullable
+            //    .WithMany(l => l.JobSchedules)    // or .WithMany() if no navigation property
+            //    .HasForeignKey(js => js.LocationId)
+            //    .WillCascadeOnDelete(false);     
 
-              //modelBuilder.Entity<EmployeeJobSchedule>()
-              //  .HasRequired(js => js.JobSchedule)   // or HasOptional if nullable
-              //  .WithMany(l => l.)    // or .WithMany() if no navigation property
-              //  .HasForeignKey(js => js.LocationId)
-              //  .WillCascadeOnDelete(false);     
+            modelBuilder.Entity<EmployeeJobSchedule>()
+              .HasRequired(js => js.LocationWeek)   // or HasOptional if nullable
+              .WithMany(l => l.EmployeeJobSchedules)    // or .WithMany() if no navigation property
+              .HasForeignKey(js => js.LocationWeekId)
+              .WillCascadeOnDelete(false);
 
-           // base.OnModelCreating(modelBuilder);
+            // base.OnModelCreating(modelBuilder);
         }
         protected override void Seed(LMS.Models.ApplicationDbContext context)
         {
@@ -54,7 +54,7 @@ namespace LMS.Migrations
                     roleManager.Create(new IdentityRole("Admin"));
                 }
 
-                user = userManager.FindByName("admin");
+                user = userManager.FindByName("Admin");
 
                 if (!userManager.IsInRole(user.Id, "Admin"))
                 {

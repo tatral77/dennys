@@ -17,6 +17,13 @@
             <asp:Button ID="Button1" runat="server" CssClass="btn btn-success" Text="+" OnClick="Button1_Click" />
         </div>--%>
     </div>
+     <div class="row" style="padding-bottom: 5px">
+         <div class="col-md-3" style="text-align:right"><asp:DropDownList ID="YearsDDL" runat="server" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="YearsDDL_SelectedIndexChanged"><asp:ListItem Value="0">Select Year</asp:ListItem></asp:DropDownList></div>
+         <div class="col-md-3" style="text-align:right"><asp:DropDownList ID="WeekDDL" runat="server" CssClass="form-control"><asp:ListItem Value="0">Select Week</asp:ListItem></asp:DropDownList></div>
+        <div class="col-md-3" style="text-align: right">
+            <asp:Button ID="CopySchedule" runat="server"  CssClass="btn btn-success" Text="Copy Schedule" OnClick="CopySchedule_Click" OnClientClick="return confirm('It will remove existing schedule records from this week ?');" />
+        </div>
+    </div>
     <div>
         <div class="row" style="margin-bottom:5px">
             <div class="col-md-2">Employee Job</div>

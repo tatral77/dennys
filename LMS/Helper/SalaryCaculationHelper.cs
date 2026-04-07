@@ -20,7 +20,7 @@ namespace LMS.Helper
             List<WeeklyPaymentByJob> weeklyPaymentByJobs;
             foreach (EmployeeJobSchedule employeeJobSchedule in schedules)
             {
-                List<EmployeeJobSchedule> employeeJobSchedules= EmployeeJobScheduleRepo.GetScheduleByEmployeeId(employeeJobSchedule.ScheduleWeekId, employeeJobSchedule.EmployeeJob.EmployeeId);
+                List<EmployeeJobSchedule> employeeJobSchedules= EmployeeJobScheduleRepo.GetScheduleByEmployeeId(employeeJobSchedule.LocationWeekId, employeeJobSchedule.EmployeeJob.EmployeeId);
                 weeklyPaymentByJobs = new List<WeeklyPaymentByJob>();
                 foreach(EmployeeJobSchedule EmployeeSchedule in employeeJobSchedules)
                 {

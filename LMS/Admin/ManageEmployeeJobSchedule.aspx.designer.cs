@@ -33,6 +33,33 @@ namespace LMS.Admin
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl Budget;
 
         /// <summary>
+        /// YearsDDL control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList YearsDDL;
+
+        /// <summary>
+        /// WeekDDL control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList WeekDDL;
+
+        /// <summary>
+        /// CopySchedule control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button CopySchedule;
+
+        /// <summary>
         /// JobTitleDDL control.
         /// </summary>
         /// <remarks>

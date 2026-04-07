@@ -2,9 +2,12 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <div class="row">
+        <div class="col-md-12" style="background-color:darkred;color:white;margin-bottom:5px;"><span style="font-size: 18pt" runat="server" id="LocationDetail"></span></div>
+    </div>
      <div class="row" style="padding-bottom: 5px">
-        <div class="col-md-6"><span style="font-size: 18pt">Weeks</span></div>
-         <div class="col-md-4" style="text-align: right">
+       <%-- <div class="col-md-6"><span style="font-size: 18pt">Weeks</span></div>--%>
+         <div class="col-md-10" style="text-align: right">
              <asp:DropDownList ID="YearsDDL" runat="server" CssClass="form-control" OnSelectedIndexChanged="YearsDDL_SelectedIndexChanged" AutoPostBack="true">
                  <asp:ListItem Value="0">Select Year</asp:ListItem>
              </asp:DropDownList>
@@ -90,13 +93,14 @@
         <ItemTemplate>
             <tr>
                 <asp:HiddenField ID="HidId" runat="server" Value='<%#Eval("Id")%>' />
+                 <asp:HiddenField ID="HidWeekId" runat="server" Value='<%#Eval("ScheduleWeekId")%>' />
                 <td>
                     <asp:Label ID="SrNo" runat="server" Text='<%#Container.DataItemIndex + 1%> '></asp:Label>
                 </td>
 
                 <td>
                    
-                   <asp:Label ID="Name" runat="server" Text='<%#Eval("WeekDecription")%>'></asp:Label>
+                   <asp:Label ID="Name" runat="server" Text='<%#Eval("ScheduleWeek.WeekDecription")%>'></asp:Label>
                 </td>
                  
                  <td>
@@ -169,13 +173,14 @@
         <EditItemTemplate>
             <tr>
                 <asp:HiddenField ID="HidId" runat="server" Value='<%#Eval("Id")%>' />
+                 <asp:HiddenField ID="HidWeekId" runat="server" Value='<%#Eval("ScheduleWeekId")%>' />
                  <%--  <asp:HiddenField ID="HidIsActive" runat="server" Value='<%#Eval("IsActive")%>' />--%>
                 <td>
                     <asp:Label ID="SrNo" runat="server" Text='<%#Container.DataItemIndex + 1%> '></asp:Label>
                 </td>
 
                 <td>
-                    <asp:TextBox ID="DescriptionTxt" class="form-control control-txt" runat="server" Text='<%#Bind("WeekDecription")%>'></asp:TextBox>
+                    <asp:TextBox ID="DescriptionTxt" class="form-control control-txt" runat="server" Text='<%#Bind("ScheduleWeek.WeekDecription")%>'></asp:TextBox>
                     <asp:RequiredFieldValidator ID="FV_Name" runat="server" ValidationGroup="g1"
                         ErrorMessage="Required" Style="color: red"
                         ControlToValidate="DescriptionTxt">

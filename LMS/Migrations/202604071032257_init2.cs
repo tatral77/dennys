@@ -3,7 +3,7 @@ namespace LMS.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class ini : DbMigration
+    public partial class init2 : DbMigration
     {
         public override void Up()
         {
@@ -62,17 +62,15 @@ namespace LMS.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.JobSchedules",
+                "dbo.LocationWeeks",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
                         ScheduleWeekId = c.Int(nullable: false),
-                        LocationId = c.Int(nullable: false),
                         Description = c.String(),
+                        LocationId = c.Int(nullable: false),
                         ForcastedSale = c.Double(nullable: false),
                         Percentage = c.Double(nullable: false),
-                        CreatedOn = c.DateTime(),
-                        IsActive = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Locations", t => t.LocationId, cascadeDelete: true)
@@ -81,14 +79,36 @@ namespace LMS.Migrations
                 .Index(t => t.LocationId);
             
             CreateTable(
+                "dbo.EmployeeJobSchedules",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        LocationWeekId = c.Int(nullable: false),
+                        EmployeeJobId = c.Int(nullable: false),
+                        StartWeekDayId = c.Int(nullable: false),
+                        StartDate = c.DateTime(nullable: false),
+                        StartTime = c.Time(nullable: false, precision: 7),
+                        EndWeekDayId = c.Int(nullable: false),
+                        EndDate = c.DateTime(nullable: false),
+                        EndTime = c.Time(nullable: false, precision: 7),
+                        IsActive = c.Boolean(nullable: false),
+                        SalaryType_Id = c.Int(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.EmployeeJobs", t => t.EmployeeJobId, cascadeDelete: true)
+                .ForeignKey("dbo.LocationWeeks", t => t.LocationWeekId, cascadeDelete: false)
+                .ForeignKey("dbo.SalaryTypes", t => t.SalaryType_Id)
+                .Index(t => t.LocationWeekId)
+                .Index(t => t.EmployeeJobId)
+                .Index(t => t.SalaryType_Id);
+            
+            CreateTable(
                 "dbo.ScheduleWeeks",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
                         WeekNumber = c.Int(nullable: false),
                         WeekDecription = c.String(),
-                        ForcastedSale = c.Double(nullable: false),
-                        Percentage = c.Double(nullable: false),
                         Year = c.Int(nullable: false),
                         WeekStartDate = c.DateTime(nullable: false),
                         WeekEndDate = c.DateTime(nullable: false),
@@ -104,28 +124,6 @@ namespace LMS.Migrations
                         IsActive = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
-            
-            CreateTable(
-                "dbo.EmployeeJobSchedules",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        ScheduleWeekId = c.Int(nullable: false),
-                        EmployeeJobId = c.Int(nullable: false),
-                        StartWeekDayId = c.Int(nullable: false),
-                        StartTime = c.Time(nullable: false, precision: 7),
-                        EndWeekDayId = c.Int(nullable: false),
-                        EndTime = c.Time(nullable: false, precision: 7),
-                        IsActive = c.Boolean(nullable: false),
-                        SalaryType_Id = c.Int(),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.EmployeeJobs", t => t.EmployeeJobId, cascadeDelete: true)
-                .ForeignKey("dbo.ScheduleWeeks", t => t.ScheduleWeekId, cascadeDelete: true)
-                .ForeignKey("dbo.SalaryTypes", t => t.SalaryType_Id)
-                .Index(t => t.ScheduleWeekId)
-                .Index(t => t.EmployeeJobId)
-                .Index(t => t.SalaryType_Id);
             
             CreateTable(
                 "dbo.EmployeeWeeklyJobs",
@@ -236,11 +234,11 @@ namespace LMS.Migrations
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
             DropForeignKey("dbo.EmployeeWeeklyJobs", "JobTitleId", "dbo.JobTitles");
             DropForeignKey("dbo.EmployeeWeeklyJobs", "EmployeeId", "dbo.Employees");
-            DropForeignKey("dbo.EmployeeJobSchedules", "ScheduleWeekId", "dbo.ScheduleWeeks");
-            DropForeignKey("dbo.EmployeeJobSchedules", "EmployeeJobId", "dbo.EmployeeJobs");
             DropForeignKey("dbo.EmployeeJobs", "JobTitleId", "dbo.JobTitles");
-            DropForeignKey("dbo.JobSchedules", "ScheduleWeekId", "dbo.ScheduleWeeks");
-            DropForeignKey("dbo.JobSchedules", "LocationId", "dbo.Locations");
+            DropForeignKey("dbo.LocationWeeks", "ScheduleWeekId", "dbo.ScheduleWeeks");
+            DropForeignKey("dbo.LocationWeeks", "LocationId", "dbo.Locations");
+            DropForeignKey("dbo.EmployeeJobSchedules", "LocationWeekId", "dbo.LocationWeeks");
+            DropForeignKey("dbo.EmployeeJobSchedules", "EmployeeJobId", "dbo.EmployeeJobs");
             DropForeignKey("dbo.Employees", "LocationId", "dbo.Locations");
             DropForeignKey("dbo.EmployeeJobs", "EmployeeId", "dbo.Employees");
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
@@ -253,9 +251,9 @@ namespace LMS.Migrations
             DropIndex("dbo.EmployeeWeeklyJobs", new[] { "EmployeeId" });
             DropIndex("dbo.EmployeeJobSchedules", new[] { "SalaryType_Id" });
             DropIndex("dbo.EmployeeJobSchedules", new[] { "EmployeeJobId" });
-            DropIndex("dbo.EmployeeJobSchedules", new[] { "ScheduleWeekId" });
-            DropIndex("dbo.JobSchedules", new[] { "LocationId" });
-            DropIndex("dbo.JobSchedules", new[] { "ScheduleWeekId" });
+            DropIndex("dbo.EmployeeJobSchedules", new[] { "LocationWeekId" });
+            DropIndex("dbo.LocationWeeks", new[] { "LocationId" });
+            DropIndex("dbo.LocationWeeks", new[] { "ScheduleWeekId" });
             DropIndex("dbo.Employees", new[] { "Phone" });
             DropIndex("dbo.Employees", new[] { "Email" });
             DropIndex("dbo.Employees", new[] { "LocationId" });
@@ -268,10 +266,10 @@ namespace LMS.Migrations
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetRoles");
             DropTable("dbo.EmployeeWeeklyJobs");
-            DropTable("dbo.EmployeeJobSchedules");
             DropTable("dbo.JobTitles");
             DropTable("dbo.ScheduleWeeks");
-            DropTable("dbo.JobSchedules");
+            DropTable("dbo.EmployeeJobSchedules");
+            DropTable("dbo.LocationWeeks");
             DropTable("dbo.Locations");
             DropTable("dbo.Employees");
             DropTable("dbo.EmployeeJobs");

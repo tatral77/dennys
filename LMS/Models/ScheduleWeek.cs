@@ -10,10 +10,10 @@ namespace LMS.Models
         public int Id { get; set; }
         public int WeekNumber { get; set; }
         public string WeekDecription { get; set; }
-        public double ForcastedSale { get; set; }
-        public double Percentage { get; set; }
         public int Year { get; set; }
         public DateTime WeekStartDate { get; set; }
         public DateTime WeekEndDate { get; set; }
+        //public List<JobSchedule> JobSchedules { get; set; }
+        public List<LocationWeek> LocationWeeks { get; set; }
     }
 }

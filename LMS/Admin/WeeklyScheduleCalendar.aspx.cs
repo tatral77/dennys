@@ -21,7 +21,8 @@ namespace LMS.Admin
             if (!IsPostBack)
             {
                 int JobScheduleId = Convert.ToInt32(Request.QueryString["Id"]);
-                GenerateTable(EmployeeJobScheduleScheduleRepo.GetWeeklyEmployeeJobSchedule(JobScheduleId));
+                var EmployeeWeeklySchedule = EmployeeJobScheduleScheduleRepo.GetWeeklyEmployeeJobSchedule(JobScheduleId);
+                GenerateTable(EmployeeWeeklySchedule);
                 BindCombos();
             }
         }

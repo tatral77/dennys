@@ -14,7 +14,9 @@ namespace LMS.Admin
     {
         EmployeeJobRepo employeeJobRepo=new EmployeeJobRepo();
         ScheduleWeekRepo scheduleWeekRepo = new ScheduleWeekRepo();
+        LocationWeekRepo locationWeekRepo = new LocationWeekRepo();
         EmployeeJobScheduleRepo EmployeeJobScheduleRepo = new EmployeeJobScheduleRepo();
+        EmployeeJobScheduleRepo AddEmployeeJobScheduleRepo = new EmployeeJobScheduleRepo();
         string lastrec = "";
         int i = 0;
         protected void Page_Load(object sender, EventArgs e)
@@ -28,15 +30,15 @@ namespace LMS.Admin
         }
         protected void BindListView()
         {
-            int Week = Convert.ToInt32(Request.QueryString["Id"]);
-            ScheduleWeek js = scheduleWeekRepo.GetScheduleWeek(Week);
+            int LocationWeekId = Convert.ToInt32(Request.QueryString["Id"]);
+            LocationWeek js = locationWeekRepo.GetLocationWeek(LocationWeekId);
          
             int EmployeeJobId = Convert.ToInt32(JobTitleDDL.SelectedValue);
             List<EmployeeJobSchedule> employeeJobSchedules = new List<EmployeeJobSchedule>();
             if (EmployeeJobId==0)
-                employeeJobSchedules= EmployeeJobScheduleRepo.GetEmployeeJobSchedules(Week);
+                employeeJobSchedules= EmployeeJobScheduleRepo.GetEmployeeJobSchedules(LocationWeekId);
             else
-                employeeJobSchedules = EmployeeJobScheduleRepo.GetScheduleByEmployeeJob(Week, EmployeeJobId);
+                employeeJobSchedules = EmployeeJobScheduleRepo.GetScheduleByEmployeeJob(LocationWeekId, EmployeeJobId);
             if (employeeJobSchedules != null)
             {
                 var data = employeeJobSchedules
@@ -72,7 +74,7 @@ namespace LMS.Admin
                     GrandTotal += ejs.TotalOverTimeAmount;
                 }
                 double TotalBudget= (js.ForcastedSale * js.Percentage) / 100;
-                Budget.InnerText ="Total Budget (" + TotalBudget + ")    "   + "Remaining Budget(" + (((js.ForcastedSale * js.Percentage) / 100) - EmployeeJobScheduleRepo.GetTotalExpenses(Week)) + ")";
+                Budget.InnerText ="Total Budget (" + TotalBudget + ")    "   + "Remaining Budget(" + (((js.ForcastedSale * js.Percentage) / 100) - EmployeeJobScheduleRepo.GetTotalExpenses(LocationWeekId)) + ")";
                 lvEmployees.DataSource = data;// EmployeeJobScheduleScheduleRepo.GetEmployeeJobSchedules(JobScheduleId);
                 lvEmployees.DataBind();
             }
@@ -92,8 +94,17 @@ namespace LMS.Admin
         }
         protected void BindCombos()
         {
-            int Week = Convert.ToInt32(Request.QueryString["Id"]);
-            ScheduleWeek scheduleWeek = scheduleWeekRepo.GetScheduleWeek(Week);
+            for (int i = 2026; i <= 2099; i++)
+            {
+                ListItem li = new ListItem();
+                li.Value = i.ToString();
+                li.Text = i.ToString();
+                YearsDDL.Items.Add(li);
+            }
+
+            int ILocationWeekd = Convert.ToInt32(Request.QueryString["Id"]);
+            var LocationWeek = locationWeekRepo.GetLocationWeek(ILocationWeekd);
+            ScheduleWeek scheduleWeek = scheduleWeekRepo.GetScheduleWeek(LocationWeek.ScheduleWeekId);
             for(DateTime weekDay=scheduleWeek.WeekStartDate;weekDay<=scheduleWeek.WeekEndDate; weekDay=weekDay.AddDays(1))
             {
                 ListItem li = new ListItem();
@@ -189,7 +200,7 @@ namespace LMS.Admin
             //{
                 int Week = Convert.ToInt32(Request.QueryString["Id"]);
                 EmployeeJobSchedule employeeJobSchedule = new EmployeeJobSchedule();
-                employeeJobSchedule.ScheduleWeekId = Week;
+                employeeJobSchedule.LocationWeekId = Week;
                 employeeJobSchedule.EmployeeJobId = Convert.ToInt32(JobTitleDDL.SelectedValue);
                 employeeJobSchedule.StartDate = StartDate;
                 employeeJobSchedule.EndDate = EndDate;
@@ -357,6 +368,64 @@ namespace LMS.Admin
             //.ToList();
             //lvEmployees.DataSource = data;// EmployeeJobScheduleScheduleRepo.GetEmployeeJobSchedules(JobScheduleId);
             //lvEmployees.DataBind();
+        }
+
+        protected void YearsDDL_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int LocationId = Convert.ToInt32(Request.QueryString["LocationId"]);
+            int year = Convert.ToInt32(YearsDDL.SelectedValue);
+            List<LocationWeek> locationWeeks = locationWeekRepo.GetAll(LocationId, year);
+            if(locationWeeks.Count!=0)
+            {
+                WeekDDL.Items.Add(new ListItem{
+                    Value="0",
+                    Text="Select Week"
+                });
+                foreach (LocationWeek lw in locationWeeks)
+                {
+
+                    ListItem listItem = new ListItem();
+                    listItem.Value = lw.Id.ToString();
+                    listItem.Text = lw.ScheduleWeek.WeekDecription;
+                    WeekDDL.Items.Add(listItem);
+                }
+              
+            }
+        }
+
+        protected void CopySchedule_Click(object sender, EventArgs e)
+        {
+            int copyFrom = Convert.ToInt32(WeekDDL.SelectedValue);
+            int copyTo = Convert.ToInt32(Request.QueryString["Id"]);
+            EmployeeJobScheduleRepo.DeleteWholeWeekSchedule(copyTo);
+            if (copyFrom!=0)
+            {
+                List<EmployeeJobSchedule> newemployeeJobSchedules = new List<EmployeeJobSchedule>();
+                List<EmployeeJobSchedule> employeeJobSchedules = EmployeeJobScheduleRepo.GetEmployeeJobSchedules(copyFrom);
+                foreach(EmployeeJobSchedule ejs in employeeJobSchedules)
+                {
+                    EmployeeJobSchedule employeeJobSchedule = new EmployeeJobSchedule();
+                    employeeJobSchedule.LocationWeekId = copyTo;
+                    employeeJobSchedule.EmployeeJobId = ejs.EmployeeJobId;
+                    EmployeeJob employeeJob = employeeJobRepo.GetEmployeeJob(ejs.EmployeeJobId);
+                    employeeJobSchedule.NormalRate = employeeJob.Rate;
+                    employeeJobSchedule.OverTimeRate = employeeJob.OverTimeRate;
+                    employeeJobSchedule.StartWeekDayId = ejs.StartWeekDayId;
+                    employeeJobSchedule.EndWeekDayId = ejs.EndWeekDayId;
+                    // employeeJobSchedule.StartWeekDay = ejs.StartWeekDay;
+                    // employeeJobSchedule.EndWeekDay = ejs.EndWeekDay;
+                    employeeJobSchedule.StartDate = ejs.StartDate.AddDays(7);
+                    employeeJobSchedule.EndDate = ejs.EndDate.AddDays(7);
+                    employeeJobSchedule.StartTime = ejs.StartTime;
+                    employeeJobSchedule.EndTime = ejs.EndTime;
+                    employeeJobSchedule.IsActive = ejs.IsActive;
+
+                    newemployeeJobSchedules.Add(employeeJobSchedule);
+                }
+               
+                AddEmployeeJobScheduleRepo.Add(newemployeeJobSchedules);
+            }
+            BindListView();
         }
     }
 }

@@ -458,13 +458,9 @@
     <Compile Include="Helper\WeeklyPaymentByJob.cs" />
     <Compile Include="Helper\WeeklyPaymentResult.cs" />
     <Compile Include="Helper\WeeksHelper.cs" />
-    <Compile Include="Migrations\202603260731538_ini.cs" />
-    <Compile Include="Migrations\202603260731538_ini.Designer.cs">
-      <DependentUpon>202603260731538_ini.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202603261005226_init.cs" />
-    <Compile Include="Migrations\202603261005226_init.Designer.cs">
-      <DependentUpon>202603261005226_init.cs</DependentUpon>
+    <Compile Include="Migrations\202604071032257_init2.cs" />
+    <Compile Include="Migrations\202604071032257_init2.Designer.cs">
+      <DependentUpon>202604071032257_init2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Employee.cs" />
@@ -475,6 +471,7 @@
     <Compile Include="Models\JobSchedule.cs" />
     <Compile Include="Models\JobTitle.cs" />
     <Compile Include="Models\Location.cs" />
+    <Compile Include="Models\LocationWeek.cs" />
     <Compile Include="Models\ScheduleWeek.cs" />
     <Compile Include="Models\SalaryType.cs" />
     <Compile Include="Models\WeeklyPayroll.cs" />
@@ -483,6 +480,7 @@
     <Compile Include="Repos\EmployeeJobScheduleRepo.cs" />
     <Compile Include="Repos\EmployeeRepo.cs" />
     <Compile Include="Repos\EmployeeWeeklyJobRepo.cs" />
+    <Compile Include="Repos\LocationWeekRepo.cs" />
     <Compile Include="Repos\ScheduleWeekRepo.cs" />
     <Compile Include="Repos\JobTitleRepo.cs" />
     <Compile Include="Repos\LocationRepo.cs" />
@@ -514,11 +512,8 @@
     <Folder Include="Users\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202603260731538_ini.resx">
-      <DependentUpon>202603260731538_ini.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202603261005226_init.resx">
-      <DependentUpon>202603261005226_init.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202604071032257_init2.resx">
+      <DependentUpon>202604071032257_init2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
